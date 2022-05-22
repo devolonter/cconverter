@@ -12,7 +12,6 @@ class NumPad extends StatelessWidget {
       int numValue = 9;
       final TextStyle textStyle = TextStyle(
           fontSize: buttonWidth * 0.5,
-          color: Colors.white
       );
 
       for (int row = 0; row < 3; row++) {

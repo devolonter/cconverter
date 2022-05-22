@@ -12,17 +12,19 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const bgColor = Color(0xFF2B2B2B);
 
-    return SafeArea(
-        child: Container(
-      color: bgColor,
-      child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: const [
-              NumPad()
-            ],
-          )),
-    ));
+    return Theme(
+        data: ThemeData.from(
+          colorScheme: const ColorScheme.dark(),
+        ),
+        child: SafeArea(
+            child: Container(
+          color: bgColor,
+          child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: const [NumPad()],
+              )),
+        )));
   }
 }
 
@@ -31,19 +33,14 @@ class CConverter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData.from(
-          colorScheme: const ColorScheme.dark(),
-      ),
-      child: (Platform.isIOS)
-          ? const CupertinoApp(
-              debugShowCheckedModeBanner: false,
-              home: MainPage(),
-            )
-          : const MaterialApp(
-              debugShowCheckedModeBanner: false,
-              home: MainPage(),
-            ),
-    );
+    return (Platform.isIOS)
+        ? const CupertinoApp(
+            debugShowCheckedModeBanner: false,
+            home: MainPage(),
+          )
+        : const MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: MainPage(),
+          );
   }
 }
