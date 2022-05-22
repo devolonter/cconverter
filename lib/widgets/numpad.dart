@@ -1,3 +1,4 @@
+import 'package:cconverter/common/math_symbols.dart';
 import 'package:flutter/material.dart';
 
 class NumPad extends StatelessWidget {
@@ -8,6 +9,12 @@ class NumPad extends StatelessWidget {
     return LayoutBuilder(builder: (builder, size) {
       final double buttonWidth = size.maxWidth / 4.0 - 16;
       final List<Widget> buttons = [];
+      final List<MathSymbol> mathSymbols = [
+        MathSymbolDiv(),
+        MathSymbolMul(),
+        MathSymbolMinus(),
+        MathSymbolPlus(),
+      ];
 
       int numValue = 9;
       final TextStyle textStyle = TextStyle(
@@ -32,7 +39,7 @@ class NumPad extends StatelessWidget {
             width: buttonWidth,
             onPressed: () {},
             color: const Color(0xFFFEA00A),
-            child: Text('', style: textStyle),
+            child: Text(mathSymbols[row].toString(), style: textStyle),
           ),
         );
       }
@@ -66,7 +73,7 @@ class NumPad extends StatelessWidget {
           width: buttonWidth,
           onPressed: () {},
           color: const Color(0xFFFEA00A),
-          child: Text('=', style: textStyle),
+          child: Text(mathSymbols.last.toString(), style: textStyle),
         ),
       );
 
