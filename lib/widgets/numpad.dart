@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import '../common/calc_symbols.dart';
 import 'package:flutter/material.dart';
 
 class NumPad extends StatelessWidget {
-  const NumPad({Key? key}) : super(key: key);
+  const NumPad({Key? key, required this.controller}) : super(key: key);
+
+  final StreamController<CalcSymbol> controller;
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +27,13 @@ class NumPad extends StatelessWidget {
 
       for (int row = 0; row < 3; row++) {
         for (int col = 0; col < 3; col++) {
+          final CalcSymbol symbol = CalcSymbol(numValue.toString());
+
           buttons.add(
             NumPadButton(
               width: buttonWidth,
-              onPressed: () {},
-              child: Text((numValue).toString(), style: textStyle),
+              onPressed: () => controller.add(symbol),
+              child: Text(numValue.toString(), style: textStyle),
             ),
           );
 
