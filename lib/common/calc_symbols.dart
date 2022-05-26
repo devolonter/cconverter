@@ -1,5 +1,5 @@
-class MathSymbol {
-  MathSymbol(this.symbol);
+class CalcSymbol {
+  CalcSymbol(this.symbol);
 
   final String symbol;
 
@@ -9,18 +9,18 @@ class MathSymbol {
   }
 }
 
-class MathSymbolPlus extends MathSymbol {
+class MathSymbolPlus extends CalcSymbol {
   MathSymbolPlus() : super('+');
 }
 
-class MathSymbolMinus extends MathSymbol {
+class MathSymbolMinus extends CalcSymbol {
   MathSymbolMinus() : super('−');
 }
 
-class MathSymbolMul extends MathSymbol {
+class MathSymbolMul extends CalcSymbol {
   MathSymbolMul() : super('×');
 }
 
-class MathSymbolDiv extends MathSymbol {
+class MathSymbolDiv extends CalcSymbol {
   MathSymbolDiv() : super('÷');
 }

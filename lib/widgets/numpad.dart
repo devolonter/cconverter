@@ -1,4 +1,4 @@
-import 'package:cconverter/common/math_symbols.dart';
+import '../common/calc_symbols.dart';
 import 'package:flutter/material.dart';
 
 class NumPad extends StatelessWidget {
@@ -9,7 +9,7 @@ class NumPad extends StatelessWidget {
     return LayoutBuilder(builder: (builder, size) {
       final double buttonWidth = size.maxWidth / 4.0 - 16;
       final List<Widget> buttons = [];
-      final List<MathSymbol> mathSymbols = [
+      final List<CalcSymbol> mathSymbols = [
         MathSymbolDiv(),
         MathSymbolMul(),
         MathSymbolMinus(),
