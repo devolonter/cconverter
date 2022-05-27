@@ -47,6 +47,12 @@ class _CalcStackState extends State<CalcStack> {
           value = '';
         });
       } else {
+        if (symbol is CalcSymbolDot) {
+          if (value.contains(CalcSymbolDot().symbol)) {
+            return;
+          }
+        }
+
         setState(() {
           value += symbol.toString();
         });

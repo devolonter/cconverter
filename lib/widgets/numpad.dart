@@ -92,8 +92,8 @@ class NumPad extends StatelessWidget {
       buttons.add(
         NumPadButton(
           width: buttonWidth,
-          onPressed: () {},
-          child: Text(',', style: textStyle),
+          onPressed: () => controller.add(CalcSymbolDot()),
+          child: Text(CalcSymbolDot().toString(), style: textStyle),
         ),
       );
 

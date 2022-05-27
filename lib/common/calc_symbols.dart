@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:intl/intl.dart';
+
 class CalcSymbol {
   CalcSymbol(this.symbol);
 
@@ -6,6 +10,19 @@ class CalcSymbol {
   @override
   String toString() {
     return symbol;
+  }
+}
+
+class CalcSymbolDot extends CalcSymbol {
+  CalcSymbolDot._init()
+      : super(NumberFormat.simpleCurrency(locale: Platform.localeName)
+            .symbols
+            .DECIMAL_SEP);
+
+  static final CalcSymbolDot _instance = CalcSymbolDot._init();
+
+  factory CalcSymbolDot() {
+    return _instance;
   }
 }
 
