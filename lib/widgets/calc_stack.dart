@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../common/calc_symbols.dart';
 
@@ -85,13 +87,27 @@ class _CalcStackState extends State<CalcStack> {
 }
 
 class NumValue extends StatelessWidget {
-  const NumValue({Key? key, required this.value}) : super(key: key);
+  NumValue({Key? key, required this.value}) : super(key: key);
 
   final String value;
+  final NumberFormat format = NumberFormat.decimalPattern(Platform.localeName);
 
   @override
   Widget build(BuildContext context) {
-    return Text(value);
+    String formattedValue =
+        format.format(value.isNotEmpty ? double.parse(value) : 0);
+    String dot = CalcSymbolDot().symbol;
+
+    if (value.contains(dot) && !formattedValue.contains(dot)) {
+      formattedValue += dot;
+    }
+
+    return Text(
+      formattedValue,
+      style: formattedValue == '0'
+          ? const TextStyle(color: Color(0xFFAAAAAA))
+          : null,
+    );
   }
 }
 
