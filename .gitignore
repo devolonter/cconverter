@@ -21,3 +21,4 @@ doc/api/
 *.js.map
 IMG_ECC5DD8FA759-1.jpeg
 .idea
+.flutter-plugins*

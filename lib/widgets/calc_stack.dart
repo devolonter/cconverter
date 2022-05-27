@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../common/calc_symbols.dart';
@@ -74,7 +75,9 @@ class _CalcStackState extends State<CalcStack> {
       child: LayoutBuilder(
         builder: (context, size) {
           return DefaultTextStyle(
-            style: TextStyle(fontSize: size.maxHeight / 7),
+            style: GoogleFonts.poppins(
+                textStyle: TextStyle(
+                    fontSize: size.maxHeight / 7)),
             child: Wrap(
               spacing: 4,
               children: interactiveExpression + [NumValue(value: value)],

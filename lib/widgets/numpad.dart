@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:google_fonts/google_fonts.dart';
+
 import '../common/calc_symbols.dart';
 import 'package:flutter/material.dart';
 
@@ -21,8 +23,10 @@ class NumPad extends StatelessWidget {
       ];
 
       int numValue = 9;
-      final TextStyle textStyle = TextStyle(
+      final TextStyle textStyle = GoogleFonts.poppins(
+        textStyle: TextStyle(
           fontSize: buttonWidth * 0.5,
+        )
       );
 
       buttons.add(
