@@ -26,9 +26,11 @@ class MainPage extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
-                        children: const [
+                        children: [
                           Expanded(
-                              child: CalcStack()
+                              child: CalcStack(
+                                input: ConvertPipe().input,
+                              )
                           )
                         ],
                       ),
