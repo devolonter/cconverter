@@ -88,7 +88,7 @@ class _CalcStackState extends State<CalcStack> {
         }
       },
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         width: double.infinity,
         decoration: BoxDecoration(
             color: const Color(0xFF333333),
@@ -112,15 +112,21 @@ class _CalcStackState extends State<CalcStack> {
 }
 
 class NumValue extends StatelessWidget {
-  const NumValue({Key? key, required this.value}) : super(key: key);
+  const NumValue({Key? key, this.color, this.fontSize, required this.value})
+      : super(key: key);
 
   final String value;
+  final Color? color;
+  final double? fontSize;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       value,
-      style: value == '0' ? const TextStyle(color: Color(0xFFAAAAAA)) : null,
+      style: value == '0'
+          ? TextStyle(
+              color: const Color(0xFFAAAAAA), fontSize: fontSize)
+          : TextStyle(color: color, fontSize: fontSize),
     );
   }
 }

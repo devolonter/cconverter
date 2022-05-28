@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cconverter/common/convert_pipe.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'calc_stack.dart';
 import 'numpad.dart';
 
@@ -24,18 +25,27 @@ class MainPage extends StatelessWidget {
               children: [
                 Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          Expanded(
-                              child: CalcStack(
-                                input: ConvertPipe().input,
-                              )
-                          )
-                        ],
-                      ),
-                    )
-                ),
+                  padding: const EdgeInsets.all(16.0),
+                  child: DefaultTextStyle(
+                    style: GoogleFonts.poppins(),
+                    child: Column(
+                      children: [
+                        Expanded(
+                            child: CalcStack(
+                          input: ConvertPipe().input,
+                        )),
+                        const Align(
+                          alignment: Alignment.bottomRight,
+                          child: NumValue(
+                            value: '0',
+                            fontSize: 40,
+                            color: Color(0xFFF1A43C),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )),
                 Container(
                     padding: const EdgeInsets.all(16),
                     width: double.infinity,
@@ -43,7 +53,8 @@ class MainPage extends StatelessWidget {
                         color: Color(0xFF3A3A3A),
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(16))),
-                    child: Center(child: NumPad(
+                    child: Center(
+                        child: NumPad(
                       controller: ConvertPipe().numPadController,
                     ))),
               ],
