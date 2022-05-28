@@ -18,7 +18,7 @@ class CalcStack extends StatefulWidget {
 }
 
 class _CalcStackState extends State<CalcStack> {
-  String value = '';
+  String value = ConvertPipe().format('');
   List<Widget> interactiveExpression = [];
 
   StreamSubscription? listener;
@@ -34,7 +34,7 @@ class _CalcStackState extends State<CalcStack> {
     widget.input.listen((CalcSymbol symbol) {
       if (symbol is CalcSymbolAC) {
         setState(() {
-          value = '';
+          value = ConvertPipe().format('');
           interactiveExpression.clear();
         });
       } else if (symbol is MathSymbolPlus ||
@@ -49,21 +49,18 @@ class _CalcStackState extends State<CalcStack> {
           interactiveExpression
               .add(NumValue(value: ConvertPipe().format(value)));
           interactiveExpression.add(Symbol(value: symbol));
-          value = '';
+          value = ConvertPipe().format('');
         });
       } else {
         if (symbol is CalcSymbolDot) {
           if (value.contains(CalcSymbolDot().symbol)) {
             return;
           }
-
-          if (value.isEmpty) {
-            value = '0';
-          }
         }
 
         setState(() {
-          value = value + symbol.toString();
+          value = ConvertPipe()
+              .format(value + symbol.toString(), stripDecimalSeparator: false);
         });
       }
     });
@@ -79,7 +76,7 @@ class _CalcStackState extends State<CalcStack> {
 
         if (details.velocity.pixelsPerSecond.dx < 0) {
           setState(() {
-            value = value.substring(0, value.length - 1);
+            value = ConvertPipe().format(value.substring(0, value.length - 1));
           });
         }
       },
@@ -97,12 +94,7 @@ class _CalcStackState extends State<CalcStack> {
                   textStyle: TextStyle(fontSize: size.maxHeight / 7)),
               child: Wrap(
                 spacing: 4,
-                children: interactiveExpression +
-                    [
-                      NumValue(
-                          value: ConvertPipe()
-                              .format(value, stripDecimalSeparator: false))
-                    ],
+                children: interactiveExpression + [NumValue(value: value)],
               ),
             );
           },
