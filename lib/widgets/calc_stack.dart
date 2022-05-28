@@ -70,7 +70,14 @@ class _CalcStackState extends State<CalcStack> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onPanEnd: (details) {
-        if (value.isEmpty) {
+        if (value == '0') {
+          if (interactiveExpression.isNotEmpty) {
+            setState(() {
+              interactiveExpression.removeLast();
+              value = (interactiveExpression.removeLast() as NumValue).value;
+            });
+          }
+
           return;
         }
 
