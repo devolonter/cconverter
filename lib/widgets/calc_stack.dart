@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cconverter/common/convert_pipe.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -45,7 +46,8 @@ class _CalcStackState extends State<CalcStack> {
         }
 
         setState(() {
-          interactiveExpression.add(NumValue(value: value));
+          interactiveExpression
+              .add(NumValue(value: ConvertPipe().format(value)));
           interactiveExpression.add(Symbol(value: symbol));
           value = '';
         });
@@ -54,10 +56,14 @@ class _CalcStackState extends State<CalcStack> {
           if (value.contains(CalcSymbolDot().symbol)) {
             return;
           }
+
+          if (value.isEmpty) {
+            value = '0';
+          }
         }
 
         setState(() {
-          value += symbol.toString();
+          value = value + symbol.toString();
         });
       }
     });
@@ -88,11 +94,15 @@ class _CalcStackState extends State<CalcStack> {
           builder: (context, size) {
             return DefaultTextStyle(
               style: GoogleFonts.poppins(
-                  textStyle: TextStyle(
-                      fontSize: size.maxHeight / 7)),
+                  textStyle: TextStyle(fontSize: size.maxHeight / 7)),
               child: Wrap(
                 spacing: 4,
-                children: interactiveExpression + [NumValue(value: value)],
+                children: interactiveExpression +
+                    [
+                      NumValue(
+                          value: ConvertPipe()
+                              .format(value, stripDecimalSeparator: false))
+                    ],
               ),
             );
           },
@@ -103,26 +113,15 @@ class _CalcStackState extends State<CalcStack> {
 }
 
 class NumValue extends StatelessWidget {
-  NumValue({Key? key, required this.value}) : super(key: key);
+  const NumValue({Key? key, required this.value}) : super(key: key);
 
   final String value;
-  final NumberFormat format = NumberFormat.decimalPattern(Platform.localeName);
 
   @override
   Widget build(BuildContext context) {
-    String formattedValue =
-        format.format(value.isNotEmpty ? double.parse(value) : 0);
-    String dot = CalcSymbolDot().symbol;
-
-    if (value.contains(dot) && !formattedValue.contains(dot)) {
-      formattedValue += dot;
-    }
-
     return Text(
-      formattedValue,
-      style: formattedValue == '0'
-          ? const TextStyle(color: Color(0xFFAAAAAA))
-          : null,
+      value,
+      style: value == '0' ? const TextStyle(color: Color(0xFFAAAAAA)) : null,
     );
   }
 }
