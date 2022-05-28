@@ -21,7 +21,9 @@ class ConvertPipe {
 
   String format(String value, {bool stripDecimalSeparator = true}) {
     String formattedValue = _format.format(value.isNotEmpty
-        ? double.parse(double.parse(value).toStringAsFixed(2))
+        ? double.parse(
+            double.parse(value.replaceAll(_format.symbols.GROUP_SEP, ''))
+                .toStringAsFixed(2))
         : 0);
     String dot = CalcSymbolDot().symbol;
 
