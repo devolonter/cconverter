@@ -53,10 +53,7 @@ class MainPage extends StatelessWidget {
                         color: Color(0xFF3A3A3A),
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(16))),
-                    child: Center(
-                        child: NumPad(
-                      controller: ConvertPipe().numPadController,
-                    ))),
+                    child: const Center(child: NumPad())),
               ],
             )),
       ),

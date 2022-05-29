@@ -9,10 +9,10 @@ class ConvertPipe {
   ConvertPipe._init();
   static final ConvertPipe _instance = ConvertPipe._init();
 
-  final StreamController<CalcSymbol> numPadController =
-      StreamController<CalcSymbol>();
-  Stream<CalcSymbol> get input => numPadController.stream;
+  Stream<CalcSymbol> get input => _numPadController.stream;
 
+  final StreamController<CalcSymbol> _numPadController =
+  StreamController<CalcSymbol>();
   final NumberFormat _format = NumberFormat.decimalPattern(Platform.localeName);
 
   factory ConvertPipe() {
@@ -38,5 +38,9 @@ class ConvertPipe {
         double.parse(value.replaceAll(_format.symbols.GROUP_SEP, ''))
             .toStringAsFixed(2))
         : 0;
+  }
+
+  void put(CalcSymbol symbol) {
+    _numPadController.add(symbol);
   }
 }

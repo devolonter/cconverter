@@ -5,10 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import '../common/calc_symbols.dart';
 import 'package:flutter/material.dart';
 
-class NumPad extends StatelessWidget {
-  const NumPad({Key? key, required this.controller}) : super(key: key);
+import '../common/convert_pipe.dart';
 
-  final StreamController<CalcSymbol> controller;
+class NumPad extends StatelessWidget {
+  const NumPad({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class NumPad extends StatelessWidget {
       buttons.add(
         NumPadButton(
           width: buttonWidth,
-          onPressed: () => controller.add(CalcSymbolAC()),
+          onPressed: () => ConvertPipe().put(CalcSymbolAC()),
           color: const Color(0xFFFEA00A),
           child: Text(CalcSymbolAC().toString(), style: textStyle),
         ),
@@ -56,7 +56,7 @@ class NumPad extends StatelessWidget {
           buttons.add(
             NumPadButton(
               width: buttonWidth,
-              onPressed: () => controller.add(symbol),
+              onPressed: () => ConvertPipe().put(symbol),
               child: Text(symbol.toString(), style: textStyle),
             ),
           );
@@ -67,7 +67,7 @@ class NumPad extends StatelessWidget {
         buttons.add(
           NumPadButton(
             width: buttonWidth,
-            onPressed: () => controller.add(mathSymbols[row]),
+            onPressed: () => ConvertPipe().put(mathSymbols[row]),
             color: const Color(0xFFFEA00A),
             child: Text(mathSymbols[row].toString(), style: textStyle),
           ),
@@ -80,7 +80,7 @@ class NumPad extends StatelessWidget {
       buttons.add(
         NumPadButton(
           width: buttonWidth,
-          onPressed: () => controller.add(zero),
+          onPressed: () => ConvertPipe().put(zero),
           child: Text(zero.toString(), style: textStyle),
         ),
       );
@@ -88,7 +88,7 @@ class NumPad extends StatelessWidget {
       buttons.add(
         NumPadButton(
           width: buttonWidth,
-          onPressed: () => controller.add(doubleZero),
+          onPressed: () => ConvertPipe().put(doubleZero),
           child: Text(doubleZero.toString(), style: textStyle),
         ),
       );
@@ -96,7 +96,7 @@ class NumPad extends StatelessWidget {
       buttons.add(
         NumPadButton(
           width: buttonWidth,
-          onPressed: () => controller.add(CalcSymbolDot()),
+          onPressed: () => ConvertPipe().put(CalcSymbolDot()),
           child: Text(CalcSymbolDot().toString(), style: textStyle),
         ),
       );
@@ -104,7 +104,7 @@ class NumPad extends StatelessWidget {
       buttons.add(
         NumPadButton(
           width: buttonWidth,
-          onPressed: () => controller.add(mathSymbols.last),
+          onPressed: () => ConvertPipe().put(mathSymbols.last),
           color: const Color(0xFFFEA00A),
           child: Text(mathSymbols.last.toString(), style: textStyle),
         ),
