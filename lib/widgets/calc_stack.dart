@@ -31,7 +31,7 @@ class _CalcStackState extends State<CalcStack> {
       listener!.cancel();
     }
 
-    widget.input.listen((CalcSymbol symbol) {
+    listener = widget.input.listen((CalcSymbol symbol) {
       if (symbol is CalcSymbolAC) {
         setState(() {
           value = ConvertPipe().format('');
