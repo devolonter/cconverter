@@ -30,6 +30,16 @@ class CalcSymbolDot extends CalcSymbol {
   }
 }
 
+class CalcSymbolBackspace extends CalcSymbol {
+  CalcSymbolBackspace._init() : super('');
+
+  static final CalcSymbolBackspace _instance = CalcSymbolBackspace._init();
+
+  factory CalcSymbolBackspace() {
+    return _instance;
+  }
+}
+
 class CalcSymbolAC extends CalcSymbol {
   CalcSymbolAC._init() : super('AC');
   static final CalcSymbolAC _instance = CalcSymbolAC._init();

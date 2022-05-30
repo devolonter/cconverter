@@ -1,14 +1,44 @@
 import 'dart:io';
+import 'dart:ui';
 
+import 'package:cconverter/common/calc_symbols.dart';
 import 'package:cconverter/common/convert_pipe.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'calc_stack.dart';
 import 'numpad.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  bool handleKeyboard(KeyEvent event) {
+    if (event is KeyUpEvent) {
+      if ((event.logicalKey.keyId >= 48 && event.logicalKey.keyId < 57) ||
+          event.logicalKey.keyId == 46) {
+        ConvertPipe().put(CalcSymbol(event.logicalKey.keyLabel));
+      } else if (event.physicalKey == PhysicalKeyboardKey.backspace) {
+        ConvertPipe().put(CalcSymbolBackspace());
+      } else if (event.physicalKey == PhysicalKeyboardKey.escape) {
+        ConvertPipe().put(CalcSymbolAC());
+      }
+    }
+
+    return false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    HardwareKeyboard.instance.removeHandler(handleKeyboard);
+    HardwareKeyboard.instance.addHandler(handleKeyboard);
+  }
 
   @override
   Widget build(BuildContext context) {

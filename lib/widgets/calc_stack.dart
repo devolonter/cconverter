@@ -38,6 +38,8 @@ class _CalcStackState extends State<CalcStack> {
           value = ConvertPipe().format('');
           interactiveExpression.clear();
         });
+      } else if (symbol is CalcSymbolBackspace) {
+        _doBackspace();
       } else if (symbol is MathSymbolPlus ||
           symbol is MathSymbolMinus ||
           symbol is MathSymbolMul ||
@@ -89,21 +91,8 @@ class _CalcStackState extends State<CalcStack> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onPanEnd: (details) {
-        if (value == '0') {
-          if (interactiveExpression.isNotEmpty) {
-            setState(() {
-              interactiveExpression.removeLast();
-              value = (interactiveExpression.removeLast() as NumValue).value;
-            });
-          }
-
-          return;
-        }
-
         if (details.velocity.pixelsPerSecond.dx < 0) {
-          setState(() {
-            value = ConvertPipe().format(value.substring(0, value.length - 1));
-          });
+          _doBackspace();
         }
       },
       child: Container(
@@ -128,6 +117,23 @@ class _CalcStackState extends State<CalcStack> {
       ),
     );
   }
+
+  void _doBackspace() {
+    if (value == '0') {
+      if (interactiveExpression.isNotEmpty) {
+        setState(() {
+          interactiveExpression.removeLast();
+          value = (interactiveExpression.removeLast() as NumValue).value;
+        });
+      }
+
+      return;
+    }
+
+    setState(() {
+      value = ConvertPipe().format(value.substring(0, value.length - 1));
+    });
+  }
 }
 
 class NumValue extends StatelessWidget {
@@ -143,8 +149,7 @@ class NumValue extends StatelessWidget {
     return Text(
       value,
       style: value == '0'
-          ? TextStyle(
-              color: const Color(0xFFAAAAAA), fontSize: fontSize)
+          ? TextStyle(color: const Color(0xFFAAAAAA), fontSize: fontSize)
           : TextStyle(color: color, fontSize: fontSize),
     );
   }
