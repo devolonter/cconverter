@@ -47,7 +47,7 @@ class ConvertPipe {
         : 0;
   }
 
-  void put(CalcSymbol symbol) {
+  void emit(CalcSymbol symbol) {
     _numPadController.add(symbol);
   }
 

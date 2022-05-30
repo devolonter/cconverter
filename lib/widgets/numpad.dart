@@ -32,7 +32,7 @@ class NumPad extends StatelessWidget {
       buttons.add(
         NumPadButton(
           width: buttonWidth,
-          onPressed: () => ConvertPipe().put(CalcSymbolAC()),
+          onPressed: () => ConvertPipe().emit(CalcSymbolAC()),
           color: const Color(0xFFFEA00A),
           child: Text(CalcSymbolAC().toString(), style: textStyle),
         ),
@@ -56,7 +56,7 @@ class NumPad extends StatelessWidget {
           buttons.add(
             NumPadButton(
               width: buttonWidth,
-              onPressed: () => ConvertPipe().put(symbol),
+              onPressed: () => ConvertPipe().emit(symbol),
               child: Text(symbol.toString(), style: textStyle),
             ),
           );
@@ -67,7 +67,7 @@ class NumPad extends StatelessWidget {
         buttons.add(
           NumPadButton(
             width: buttonWidth,
-            onPressed: () => ConvertPipe().put(mathSymbols[row]),
+            onPressed: () => ConvertPipe().emit(mathSymbols[row]),
             color: const Color(0xFFFEA00A),
             child: Text(mathSymbols[row].toString(), style: textStyle),
           ),
@@ -80,7 +80,7 @@ class NumPad extends StatelessWidget {
       buttons.add(
         NumPadButton(
           width: buttonWidth,
-          onPressed: () => ConvertPipe().put(zero),
+          onPressed: () => ConvertPipe().emit(zero),
           child: Text(zero.toString(), style: textStyle),
         ),
       );
@@ -88,7 +88,7 @@ class NumPad extends StatelessWidget {
       buttons.add(
         NumPadButton(
           width: buttonWidth,
-          onPressed: () => ConvertPipe().put(doubleZero),
+          onPressed: () => ConvertPipe().emit(doubleZero),
           child: Text(doubleZero.toString(), style: textStyle),
         ),
       );
@@ -96,7 +96,7 @@ class NumPad extends StatelessWidget {
       buttons.add(
         NumPadButton(
           width: buttonWidth,
-          onPressed: () => ConvertPipe().put(CalcSymbolDot()),
+          onPressed: () => ConvertPipe().emit(CalcSymbolDot()),
           child: Text(CalcSymbolDot().toString(), style: textStyle),
         ),
       );
@@ -104,7 +104,7 @@ class NumPad extends StatelessWidget {
       buttons.add(
         NumPadButton(
           width: buttonWidth,
-          onPressed: () => ConvertPipe().put(mathSymbols.last),
+          onPressed: () => ConvertPipe().emit(mathSymbols.last),
           color: const Color(0xFFFEA00A),
           child: Text(mathSymbols.last.toString(), style: textStyle),
         ),

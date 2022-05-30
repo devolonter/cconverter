@@ -22,11 +22,11 @@ class _MainPageState extends State<MainPage> {
     if (event is KeyUpEvent) {
       if ((event.logicalKey.keyId >= 48 && event.logicalKey.keyId < 57) ||
           event.logicalKey.keyId == 46) {
-        ConvertPipe().put(CalcSymbol(event.logicalKey.keyLabel));
+        ConvertPipe().emit(CalcSymbol(event.logicalKey.keyLabel));
       } else if (event.physicalKey == PhysicalKeyboardKey.backspace) {
-        ConvertPipe().put(CalcSymbolBackspace());
+        ConvertPipe().emit(CalcSymbolBackspace());
       } else if (event.physicalKey == PhysicalKeyboardKey.escape) {
-        ConvertPipe().put(CalcSymbolAC());
+        ConvertPipe().emit(CalcSymbolAC());
       }
     }
 
