@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:google_fonts/google_fonts.dart';
 
 import '../common/calc_symbols.dart';

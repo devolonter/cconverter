@@ -19,8 +19,6 @@ class ConvertPipe {
 
   final NumberFormat _format = NumberFormat.decimalPattern(Platform.localeName);
 
-  final int _lastExpressionLength = 0;
-
   factory ConvertPipe() {
     return _instance;
   }
