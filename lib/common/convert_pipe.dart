@@ -52,7 +52,7 @@ class ConvertPipe {
   }
 
   void eval(List<dynamic> expression, String tail) {
-    if (tail != '0' || tail != '0.') {
+    if (tail != '0' && tail != '0.') {
       expression.add(tail);
     } else if (expression.isNotEmpty) {
       expression = expression.sublist(0, expression.length - 1);
