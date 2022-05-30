@@ -25,29 +25,32 @@ class MainPage extends StatelessWidget {
               children: [
                 Expanded(
                     child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0)
+                      .subtract(const EdgeInsets.only(bottom: 8)),
                   child: DefaultTextStyle(
                     style: GoogleFonts.poppins(),
-                    child: Column(
-                      children: [
-                        Expanded(
-                            child: CalcStack(
-                          input: ConvertPipe().input,
-                        )),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: StreamBuilder<String>(
-                              stream: ConvertPipe().output,
-                              builder: (context, snapshot) {
-                                return NumValue(
-                                  value: ConvertPipe().format(snapshot.data),
-                                  fontSize: 40,
-                                  color: const Color(0xFFF1A43C),
-                                );
-                              }),
-                        )
-                      ],
-                    ),
+                    child: LayoutBuilder(builder: (context, size) {
+                      return Column(
+                        children: [
+                          Expanded(
+                              child: CalcStack(
+                            input: ConvertPipe().input,
+                          )),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: StreamBuilder<String>(
+                                stream: ConvertPipe().output,
+                                builder: (context, snapshot) {
+                                  return NumValue(
+                                    value: ConvertPipe().format(snapshot.data),
+                                    fontSize: size.maxHeight / 6,
+                                    color: const Color(0xFFF1A43C),
+                                  );
+                                }),
+                          )
+                        ],
+                      );
+                    }),
                   ),
                 )),
                 Container(

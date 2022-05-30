@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cconverter/common/convert_pipe.dart';
 import 'package:flutter/material.dart';
@@ -116,7 +117,7 @@ class _CalcStackState extends State<CalcStack> {
           builder: (context, size) {
             return DefaultTextStyle(
               style: GoogleFonts.poppins(
-                  textStyle: TextStyle(fontSize: size.maxHeight / 7)),
+                  textStyle: TextStyle(fontSize: max(size.maxHeight / 7, 20))),
               child: Wrap(
                 spacing: 4,
                 children: interactiveExpression + [NumValue(value: value)],
