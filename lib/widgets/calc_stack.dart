@@ -67,6 +67,24 @@ class _CalcStackState extends State<CalcStack> {
   }
 
   @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+    List<dynamic> expression = [];
+
+    for (Widget element in interactiveExpression) {
+      if (element is NumValue) {
+        expression.add(element.value);
+      }
+
+      if (element is Symbol) {
+        expression.add(element.value);
+      }
+    }
+
+    ConvertPipe().eval(expression, value);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onPanEnd: (details) {

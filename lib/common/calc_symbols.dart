@@ -11,6 +11,10 @@ class CalcSymbol {
   String toString() {
     return symbol;
   }
+
+  String toMath() {
+    return '';
+  }
 }
 
 class CalcSymbolDot extends CalcSymbol {
@@ -42,6 +46,11 @@ class MathSymbolPlus extends CalcSymbol {
   factory MathSymbolPlus() {
     return _instance;
   }
+
+  @override
+  String toMath() {
+    return '+';
+  }
 }
 
 class MathSymbolMinus extends CalcSymbol {
@@ -50,6 +59,11 @@ class MathSymbolMinus extends CalcSymbol {
 
   factory MathSymbolMinus() {
     return _instance;
+  }
+
+  @override
+  String toMath() {
+    return '-';
   }
 }
 
@@ -60,6 +74,11 @@ class MathSymbolMul extends CalcSymbol {
   factory MathSymbolMul() {
     return _instance;
   }
+
+  @override
+  String toMath() {
+    return '*';
+  }
 }
 
 class MathSymbolDiv extends CalcSymbol {
@@ -68,5 +87,10 @@ class MathSymbolDiv extends CalcSymbol {
 
   factory MathSymbolDiv() {
     return _instance;
+  }
+
+  @override
+  String toMath() {
+    return '/';
   }
 }

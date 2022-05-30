@@ -34,13 +34,17 @@ class MainPage extends StatelessWidget {
                             child: CalcStack(
                           input: ConvertPipe().input,
                         )),
-                        const Align(
+                        Align(
                           alignment: Alignment.bottomRight,
-                          child: NumValue(
-                            value: '0',
-                            fontSize: 40,
-                            color: Color(0xFFF1A43C),
-                          ),
+                          child: StreamBuilder<String>(
+                              stream: ConvertPipe().output,
+                              builder: (context, snapshot) {
+                                return NumValue(
+                                  value: ConvertPipe().format(snapshot.data),
+                                  fontSize: 40,
+                                  color: const Color(0xFFF1A43C),
+                                );
+                              }),
                         )
                       ],
                     ),
