@@ -4,6 +4,7 @@ import '../common/calc_symbols.dart';
 import 'package:flutter/material.dart';
 
 import '../common/convert_pipe.dart';
+import 'currency_picker.dart';
 
 class NumPad extends StatelessWidget {
   const NumPad({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class NumPad extends StatelessWidget {
         buttons.add(
           NumPadButton(
             width: buttonWidth,
-            onPressed: () {},
+            onPressed: () => CurrencyPicker.show(context),
             child: Text('', style: textStyle),
           ),
         );
