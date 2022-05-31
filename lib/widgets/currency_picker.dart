@@ -118,7 +118,12 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                     currencies.add(
                       IconButton(
                           padding: EdgeInsets.zero,
-                          onPressed: () => Navigator.pop(context, currency),
+                          onPressed: () {
+                            Future.delayed(const Duration(milliseconds: 250))
+                                .then((value) {
+                              Navigator.pop(context, currency);
+                            });
+                          },
                           splashRadius: buttonWidth * 0.5,
                           iconSize: buttonWidth,
                           icon: Column(
