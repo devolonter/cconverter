@@ -7,8 +7,8 @@ class CurrencyPicker extends StatelessWidget {
 
   static final CurrencyService _currencyService = CurrencyService();
 
-  static Future<String?> show(BuildContext context) {
-    return showModalBottomSheet<String?>(
+  static Future<Currency?> show(BuildContext context) {
+    return showModalBottomSheet<Currency?>(
         context: context,
         isScrollControlled: true,
         backgroundColor: const Color(0xFF2B2B2B),
@@ -62,7 +62,7 @@ class CurrencyPicker extends StatelessWidget {
                     currencies.add(
                       IconButton(
                           padding: EdgeInsets.zero,
-                          onPressed: () => false,
+                          onPressed: () => Navigator.pop(context, currency),
                           splashRadius: buttonWidth * 0.5,
                           iconSize: buttonWidth,
                           icon: Column(
