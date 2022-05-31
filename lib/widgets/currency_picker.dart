@@ -2,7 +2,7 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CurrencyPicker extends StatelessWidget {
+class CurrencyPicker extends StatefulWidget {
   const CurrencyPicker({Key? key}) : super(key: key);
 
   static final CurrencyService _currencyService = CurrencyService();
@@ -17,6 +17,31 @@ class CurrencyPicker extends StatelessWidget {
         builder: (context) {
           return const CurrencyPicker();
         });
+  }
+
+  @override
+  State<CurrencyPicker> createState() => _CurrencyPickerState();
+}
+
+class _CurrencyPickerState extends State<CurrencyPicker> {
+  String? search;
+  final TextEditingController _searchController = TextEditingController();
+
+  List<Currency> get currencies {
+    if (search == null || search!.isEmpty) {
+      return CurrencyPicker._currencyService.getAll();
+    }
+
+    List<Currency> result = [];
+    result.addAll(CurrencyPicker._currencyService.getAll().where(
+        (Currency currency) =>
+            currency.code.startsWith(search!.toUpperCase())));
+
+    result.addAll(CurrencyPicker._currencyService.getAll().where(
+        (Currency currency) =>
+            currency.name.toLowerCase().contains(search!.toLowerCase())));
+
+    return result.toSet().toList(growable: false);
   }
 
   @override
@@ -36,15 +61,46 @@ class CurrencyPicker extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                   color: const Color(0x44444444),
                 ),
-                child: TextField(
-                  cursorColor: Colors.white,
-                  decoration: const InputDecoration(
-                    hintText: 'Search currency',
-                    border: InputBorder.none
-                  ),
-                  style: GoogleFonts.poppins(textStyle: const TextStyle(
-                    fontSize: 16
-                  )),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        cursorColor: Colors.white,
+                        decoration: const InputDecoration(
+                            hintText: 'Search currency',
+                            border: InputBorder.none),
+                        style: GoogleFonts.poppins(
+                            textStyle: const TextStyle(fontSize: 16)),
+                        onChanged: (value) {
+                          setState(() {
+                            search = value;
+                          });
+                        },
+                      ),
+                    ),
+                    Visibility(
+                      visible: search != null && search!.isNotEmpty,
+                      child: SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: IconButton(
+                            padding: EdgeInsets.zero,
+                            iconSize: 16,
+                            splashRadius: 16,
+                            onPressed: () {
+                              setState(() {
+                                search = null;
+                                _searchController.clear();
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.close,
+                              size: 16,
+                            )),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -57,7 +113,7 @@ class CurrencyPicker extends StatelessWidget {
                 final TextStyle labelStyle =
                     TextStyle(fontSize: buttonWidth * 0.15);
 
-                _currencyService.getAll().forEach((Currency currency) {
+                for (Currency currency in this.currencies) {
                   if (currency.flag != null) {
                     currencies.add(
                       IconButton(
@@ -80,10 +136,11 @@ class CurrencyPicker extends StatelessWidget {
                           )),
                     );
                   }
-                });
+                }
 
                 return SizedBox(
                   height: MediaQuery.of(context).size.height * 0.5,
+                  width: size.maxWidth,
                   child: SingleChildScrollView(
                     child: Wrap(
                       children: currencies,
