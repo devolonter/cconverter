@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../common/calc_symbols.dart';
 import '../common/convert_pipe.dart';
 import 'calc_stack.dart';
+import 'currency_picker.dart';
 import 'numpad.dart';
 
 class MainPage extends StatefulWidget {
@@ -55,29 +56,51 @@ class _MainPageState extends State<MainPage> {
               children: [
                 Expanded(
                     child: Padding(
-                  padding: const EdgeInsets.all(16.0)
-                      .subtract(const EdgeInsets.only(bottom: 8)),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: DefaultTextStyle(
                     style: GoogleFonts.poppins(),
                     child: LayoutBuilder(builder: (context, size) {
                       return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Row(children: [
+                            CurrencyPickerButton(
+                              size: size.maxHeight / 15,
+                              currency: ConvertPipe().from,
+                              onChanged: (currency) =>
+                                  ConvertPipe().from = currency,
+                            )
+                          ]),
                           Expanded(
-                              child: CalcStack(
-                            input: ConvertPipe().input,
-                          )),
+                            child: CalcStack(
+                              input: ConvertPipe().input,
+                            ),
+                          ),
                           Align(
-                            alignment: Alignment.bottomRight,
-                            child: StreamBuilder<String>(
-                                stream: ConvertPipe().output,
-                                builder: (context, snapshot) {
-                                  return NumValue(
-                                    value: ConvertPipe().format(snapshot.data),
-                                    fontSize: size.maxHeight / 6,
-                                    color: const Color(0xFFF1A43C),
-                                  );
-                                }),
-                          )
+                            alignment: Alignment.centerRight,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CurrencyPickerButton(
+                                  size: size.maxHeight / 15,
+                                  currency: ConvertPipe().from,
+                                  onChanged: (currency) =>
+                                      ConvertPipe().from = currency,
+                                ),
+                                StreamBuilder<String>(
+                                    stream: ConvertPipe().output,
+                                    builder: (context, snapshot) {
+                                      return NumValue(
+                                        value:
+                                            ConvertPipe().format(snapshot.data),
+                                        fontSize: size.maxHeight / 6,
+                                        color: const Color(0xFFF1A43C),
+                                      );
+                                    }),
+                              ],
+                            ),
+                          ),
                         ],
                       );
                     }),

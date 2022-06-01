@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:eval_ex/expression.dart';
 import 'package:intl/intl.dart';
 
+import 'package:currency_picker/currency_picker.dart';
 import 'calc_symbols.dart';
 
 class ConvertPipe {
@@ -13,11 +14,32 @@ class ConvertPipe {
   Stream<CalcSymbol> get input => _numPadController.stream;
   Stream<String> get output => _evalController.stream;
 
+  Currency get from {
+    if (_from != null) {
+      return _from!;
+    }
+
+    final String? name =
+        NumberFormat.simpleCurrency(locale: Platform.localeName).currencyName;
+    final Currency? result =
+        _currencyService.findByCode(name) ?? _currencyService.findByCode('USD');
+    return result!;
+  }
+
+  set from(Currency value) {
+    _from = value;
+  }
+
+  CurrencyService get currencies => _currencyService;
+
   final StreamController<CalcSymbol> _numPadController =
       StreamController<CalcSymbol>();
   final StreamController<String> _evalController = StreamController<String>();
 
+  Currency? _from;
+
   final NumberFormat _format = NumberFormat.decimalPattern(Platform.localeName);
+  final CurrencyService _currencyService = CurrencyService();
 
   factory ConvertPipe() {
     return _instance;

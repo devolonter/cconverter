@@ -2,10 +2,10 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../common/convert_pipe.dart';
+
 class CurrencyPicker extends StatefulWidget {
   const CurrencyPicker({Key? key}) : super(key: key);
-
-  static final CurrencyService _currencyService = CurrencyService();
 
   static Future<Currency?> show(BuildContext context) {
     return showModalBottomSheet<Currency?>(
@@ -29,17 +29,15 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
 
   List<Currency> get currencies {
     if (search == null || search!.isEmpty) {
-      return CurrencyPicker._currencyService.getAll();
+      return ConvertPipe().currencies.getAll();
     }
 
     List<Currency> result = [];
-    result.addAll(CurrencyPicker._currencyService.getAll().where(
-        (Currency currency) =>
-            currency.code.startsWith(search!.toUpperCase())));
+    result.addAll(ConvertPipe().currencies.getAll().where((Currency currency) =>
+        currency.code.startsWith(search!.toUpperCase())));
 
-    result.addAll(CurrencyPicker._currencyService.getAll().where(
-        (Currency currency) =>
-            currency.name.toLowerCase().contains(search!.toLowerCase())));
+    result.addAll(ConvertPipe().currencies.getAll().where((Currency currency) =>
+        currency.name.toLowerCase().contains(search!.toLowerCase())));
 
     return result.toSet().toList(growable: false);
   }
@@ -161,97 +159,53 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
   }
 }
 
-class FlexibleBottomSheet extends StatelessWidget {
-  const FlexibleBottomSheet(
-      {Key? key,
-      required this.children,
-      this.close = true,
-      this.hasBottomPadding = true,
-      this.crossAxisAlignment = CrossAxisAlignment.start})
-      : super(key: key);
-
-  final List<Widget> children;
-  final bool close;
-  final bool hasBottomPadding;
-  final CrossAxisAlignment crossAxisAlignment;
-
-  static Widget title(String title) {
-    return _Title(title: title);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final List<Widget> children = [];
-
-    children.add(ConstrainedBox(
-        constraints: const BoxConstraints(
-            minWidth: double.infinity, maxHeight: double.infinity),
-        child: Container(
-          padding: const EdgeInsets.all(12)
-              .add(EdgeInsets.only(bottom: hasBottomPadding ? 34 - 12 : -12))
-              .add(EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom)),
-          child: Column(
-              crossAxisAlignment: crossAxisAlignment,
-              mainAxisSize: MainAxisSize.min,
-              children: this.children),
-        )));
-
-    if (close) {
-      children.add(
-        Positioned(
-          right: 12,
-          top: 12,
-          child: Container(
-            height: 24,
-            width: 24,
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle, color: Color(0xFF343434)),
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              splashRadius: 12,
-              iconSize: 16,
-              color: const Color(0xFF909090),
-              icon: const Icon(Icons.close),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
-        ),
-      );
-    }
-
-    return Material(
-      color: const Color(0xFF1C1C1C),
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-      child: Stack(
-        children: children,
-      ),
-    );
-  }
-}
-
-class _Title extends StatelessWidget {
-  const _Title({
+class CurrencyPickerButton extends StatefulWidget {
+  const CurrencyPickerButton({
     Key? key,
-    required this.title,
+    required this.currency,
+    required this.size,
+    required this.onChanged,
   }) : super(key: key);
 
-  final String title;
+  final Currency currency;
+  final double size;
+  final Function(Currency) onChanged;
+
+  @override
+  State<CurrencyPickerButton> createState() => _CurrencyPickerButtonState();
+}
+
+class _CurrencyPickerButtonState extends State<CurrencyPickerButton> {
+  Currency? currency;
+
+  @override
+  void initState() {
+    super.initState();
+    currency = widget.currency;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 3.0, bottom: 20),
+    return TextButton(
+        style: TextButton.styleFrom(
+            minimumSize: Size.zero,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            primary: const Color(0xFFAEAEAE)),
+        onPressed: () {
+          CurrencyPicker.show(context).then((value) {
+            if (value == null) {
+              return;
+            }
+
+            widget.onChanged(value);
+            setState(() {
+              currency = value;
+            });
+          });
+        },
         child: Text(
-          title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.white, fontSize: 14),
-        ),
-      ),
-    );
+          currency!.code,
+          style: GoogleFonts.poppins(fontSize: widget.size),
+        ));
   }
 }
