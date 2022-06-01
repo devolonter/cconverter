@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../common/calc_symbols.dart';
 import '../common/convert_pipe.dart';
@@ -76,6 +77,24 @@ class _MainPageState extends State<MainPage> {
                               input: ConvertPipe().input,
                             ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0)
+                                .subtract(const EdgeInsets.only(bottom: 8)),
+                            child: ChangeNotifierProvider(
+                              create: (_) => ConvertPipe(),
+                              child: Consumer<ConvertPipe>(
+                                  builder: (context, pipe, child) {
+                                return Text(
+                                  pipe.rate != null
+                                      ? '1 ${pipe.from.code} = ${pipe.rate} ${pipe.to.code}'
+                                      : '...',
+                                  style: TextStyle(
+                                      color: const Color(0xFFA5A5A5),
+                                      fontSize: size.maxHeight / 18),
+                                );
+                              }),
+                            ),
+                          ),
                           Align(
                             alignment: Alignment.centerRight,
                             child: Row(
@@ -84,9 +103,9 @@ class _MainPageState extends State<MainPage> {
                               children: [
                                 CurrencyPickerButton(
                                   size: size.maxHeight / 15,
-                                  currency: ConvertPipe().from,
+                                  currency: ConvertPipe().to,
                                   onChanged: (currency) =>
-                                      ConvertPipe().from = currency,
+                                      ConvertPipe().to = currency,
                                 ),
                                 StreamBuilder<String>(
                                     stream: ConvertPipe().output,

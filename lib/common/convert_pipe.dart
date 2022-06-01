@@ -1,18 +1,35 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:eval_ex/expression.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:currency_picker/currency_picker.dart';
 import 'calc_symbols.dart';
 
-class ConvertPipe {
+class ConvertPipe extends ChangeNotifier {
   ConvertPipe._init();
   static final ConvertPipe _instance = ConvertPipe._init();
 
+  final StreamController<CalcSymbol> _numPadController =
+      StreamController<CalcSymbol>();
+  final StreamController<String> _evalController = StreamController<String>();
+
+  Currency? _from;
+  Currency? _to;
+  RatesData? _ratesData;
+  double? _rate;
+  double? _lastCalc;
+
+  final NumberFormat _format = NumberFormat.decimalPattern(Platform.localeName);
+  final CurrencyService _currencyService = CurrencyService();
+
   Stream<CalcSymbol> get input => _numPadController.stream;
   Stream<String> get output => _evalController.stream;
+  String? get rate => (_rate != null) ? _format.format(_rate) : null;
 
   Currency get from {
     if (_from != null) {
@@ -23,23 +40,33 @@ class ConvertPipe {
         NumberFormat.simpleCurrency(locale: Platform.localeName).currencyName;
     final Currency? result =
         _currencyService.findByCode(name) ?? _currencyService.findByCode('USD');
-    return result!;
+
+    _from = result!;
+    return result;
   }
 
   set from(Currency value) {
     _from = value;
+    loadRates().then((value) => _convert());
+  }
+
+  Currency get to {
+    if (_to != null) {
+      return _to!;
+    }
+
+    final Currency? result =
+        _currencyService.findByCode(from.code == 'USD' ? 'EUR' : 'USD');
+    _to = result!;
+    return result;
+  }
+
+  set to(Currency value) {
+    _to = value;
+    loadRates().then((value) => _convert());
   }
 
   CurrencyService get currencies => _currencyService;
-
-  final StreamController<CalcSymbol> _numPadController =
-      StreamController<CalcSymbol>();
-  final StreamController<String> _evalController = StreamController<String>();
-
-  Currency? _from;
-
-  final NumberFormat _format = NumberFormat.decimalPattern(Platform.localeName);
-  final CurrencyService _currencyService = CurrencyService();
 
   factory ConvertPipe() {
     return _instance;
@@ -91,6 +118,51 @@ class ConvertPipe {
       return (e as CalcSymbol).toMath();
     }).join());
 
-    _evalController.add(calc.eval().toString());
+    _lastCalc = calc.eval()?.toDouble();
+    _convert();
+  }
+
+  Future<void> loadRates() async {
+    _ratesData = null;
+    _rate = null;
+    notifyListeners();
+
+    final String symbols =
+        currencies.getAll().map((Currency currency) => currency.code).join(',');
+    final http.Response response = await http.get(Uri.parse(
+        'https://api.exchangerate.host/latest?symbols=$symbols&base=${from.code}'));
+
+    if (response.statusCode == 200) {
+      _ratesData = RatesData.fromJson(response.body);
+      if (_ratesData != null && _ratesData!.rates.containsKey(to.code)) {
+        _rate = _ratesData?.rates[to.code];
+        notifyListeners();
+      }
+    }
+  }
+
+  void _convert() {
+    _evalController.add(((_lastCalc ?? 0) * (_rate ?? 1)).toString());
+  }
+}
+
+class RatesData {
+  RatesData(this.rates);
+
+  final Map<String, double> rates;
+
+  static RatesData? fromJson(String json) {
+    final Map<String, dynamic> result = jsonDecode(json);
+
+    if (!(result['success'] as bool)) {
+      return null;
+    }
+
+    return RatesData((result['rates'] as Map<String, dynamic>).map(
+        (key, value) => MapEntry(
+            key,
+            value.runtimeType == int
+                ? (value as int).toDouble()
+                : value as double)));
   }
 }
