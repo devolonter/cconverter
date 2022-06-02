@@ -107,6 +107,7 @@ class ConvertPipe extends ChangeNotifier {
 
     if (expression.isEmpty) {
       _evalController.add('0');
+      _lastCalc = null;
       return;
     }
 
