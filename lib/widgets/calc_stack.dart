@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,7 +19,9 @@ class CalcStack extends StatefulWidget {
 
 class _CalcStackState extends State<CalcStack> {
   String value = ConvertPipe().format('');
+  Currency? valueCurrency;
   List<Widget> interactiveExpression = [];
+  NumValue? interactiveValue;
 
   StreamSubscription? listener;
 
@@ -34,6 +37,7 @@ class _CalcStackState extends State<CalcStack> {
       if (symbol is CalcSymbolAC) {
         setState(() {
           value = ConvertPipe().format('');
+          valueCurrency = null;
           interactiveExpression.clear();
         });
       } else if (symbol is CalcSymbolBackspace) {
@@ -47,14 +51,18 @@ class _CalcStackState extends State<CalcStack> {
         }
 
         setState(() {
-          interactiveExpression
-              .add(NumValue(value: ConvertPipe().format(value)));
+          interactiveExpression.add(interactiveValue!);
           interactiveExpression.add(Symbol(value: symbol));
           value = ConvertPipe().format('');
+          valueCurrency = null;
+        });
+      } else if (symbol is CalcSymbolCurrency) {
+        setState(() {
+          valueCurrency = symbol.symbol as Currency;
         });
       } else {
         if (symbol is CalcSymbolDot) {
-          if (value.contains(CalcSymbolDot().symbol)) {
+          if (value.contains(CalcSymbolDot().toString())) {
             return;
           }
         }
@@ -74,7 +82,11 @@ class _CalcStackState extends State<CalcStack> {
 
     for (Widget element in interactiveExpression) {
       if (element is NumValue) {
-        expression.add(element.value);
+        if (element.currency == null) {
+          expression.add(element.value);
+        } else {
+          expression.add([element.value, element.currency!.code]);
+        }
       }
 
       if (element is Symbol) {
@@ -82,7 +94,11 @@ class _CalcStackState extends State<CalcStack> {
       }
     }
 
-    ConvertPipe().eval(expression, value);
+    ConvertPipe().eval(
+        expression,
+        valueCurrency == null
+            ? value
+            : [value, valueCurrency!.code]);
   }
 
   @override
@@ -102,12 +118,17 @@ class _CalcStackState extends State<CalcStack> {
             border: Border.all(color: const Color(0xFFF1A43C))),
         child: LayoutBuilder(
           builder: (context, size) {
+            interactiveValue = NumValue(
+              value: value,
+              currency: valueCurrency,
+              currencySize: size.maxHeight / 3.5,
+            );
             return DefaultTextStyle(
               style: GoogleFonts.poppins(
                   textStyle: TextStyle(fontSize: max(size.maxHeight / 7, 20))),
               child: Wrap(
                 spacing: 4,
-                children: interactiveExpression + [NumValue(value: value)],
+                children: interactiveExpression + [interactiveValue!],
               ),
             );
           },
@@ -135,20 +156,51 @@ class _CalcStackState extends State<CalcStack> {
 }
 
 class NumValue extends StatelessWidget {
-  const NumValue({Key? key, this.color, this.fontSize, required this.value})
-      : super(key: key);
+  const NumValue({
+    Key? key,
+    this.color,
+    this.fontSize,
+    this.currency,
+    this.currencySize,
+    required this.value,
+  }) : super(key: key);
 
   final String value;
   final Color? color;
   final double? fontSize;
+  final double? currencySize;
+  final Currency? currency;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    final Widget displayNum = Text(
       value,
       style: value == '0'
           ? TextStyle(color: const Color(0xFFAAAAAA), fontSize: fontSize)
           : TextStyle(color: color, fontSize: fontSize),
+    );
+
+    if (currency == null) {
+      return displayNum;
+    }
+
+    String symbol = currency!.symbol;
+
+    if (symbol == '\$' && currency!.code != 'USD') {
+      symbol = currency!.code;
+    }
+
+    return Wrap(
+      spacing: 2,
+      children: [
+        Text(
+          symbol,
+          style: TextStyle(
+              color: const Color(0xFFFEA00A),
+              fontSize: currencySize != null ? currencySize! * 0.5 : null),
+        ),
+        displayNum
+      ],
     );
   }
 }

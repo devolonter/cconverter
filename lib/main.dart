@@ -5,6 +5,9 @@ import 'common/convert_pipe.dart';
 import 'widgets/cconverter.dart';
 
 void main() async {
-  await ConvertPipe().loadRates();
+  await Future.wait([
+    ConvertPipe().loadRates(),
+    ConvertPipe().loadInverseRates(),
+  ]);
   runApp(const CConverter());
 }

@@ -21,7 +21,9 @@ class ConvertPipe extends ChangeNotifier {
   Currency? _from;
   Currency? _to;
   RatesData? _ratesData;
+  RatesData? _inverseRatesData;
   double? _rate;
+  List<dynamic> _lastExpression = [];
   double? _lastCalc;
 
   final NumberFormat _format = NumberFormat.decimalPattern(Platform.localeName);
@@ -47,7 +49,7 @@ class ConvertPipe extends ChangeNotifier {
 
   set from(Currency value) {
     _from = value;
-    loadRates().then((value) => _convert());
+    loadRates().then((value) => eval(_lastExpression));
   }
 
   Currency get to {
@@ -63,7 +65,7 @@ class ConvertPipe extends ChangeNotifier {
 
   set to(Currency value) {
     _to = value;
-    loadRates().then((value) => _convert());
+    loadRates().then((value) => eval(_lastExpression));
   }
 
   CurrencyService get currencies => _currencyService;
@@ -98,12 +100,19 @@ class ConvertPipe extends ChangeNotifier {
     _numPadController.add(symbol);
   }
 
-  void eval(List<dynamic> expression, String tail) {
-    if (tail != '0' && tail != '0.') {
-      expression.add(tail);
-    } else if (expression.isNotEmpty) {
-      expression = expression.sublist(0, expression.length - 1);
+  void eval(List<dynamic> expression, [dynamic tail]) {
+    //to avoid side effects
+    expression = expression.toList();
+
+    if (tail != null) {
+      if (tail != '0' && tail != '0.') {
+        expression.add(tail);
+      } else if (expression.isNotEmpty) {
+        expression = expression.sublist(0, expression.length - 1);
+      }
     }
+
+    _lastExpression = expression;
 
     if (expression.isEmpty) {
       _evalController.add('0');
@@ -113,14 +122,16 @@ class ConvertPipe extends ChangeNotifier {
 
     final Expression calc = Expression(expression.map((e) {
       if (e is String) {
-        return toDouble(e).toString();
+        return (toDouble(e) * (_rate ?? 1));
+      } else if (e is List<dynamic>) {
+        return (toDouble(e[0]) * _inverseRatesData!.rates[e[1]]!.toDouble());
       }
 
       return (e as CalcSymbol).toMath();
     }).join());
 
     _lastCalc = calc.eval()?.toDouble();
-    _convert();
+    _evalController.add(((_lastCalc ?? 0)).toString());
   }
 
   Future<void> loadRates() async {
@@ -128,22 +139,28 @@ class ConvertPipe extends ChangeNotifier {
     _rate = null;
     notifyListeners();
 
-    final String symbols =
-        currencies.getAll().map((Currency currency) => currency.code).join(',');
-    final http.Response response = await http.get(Uri.parse(
-        'https://api.exchangerate.host/latest?symbols=$symbols&base=${from.code}'));
-
-    if (response.statusCode == 200) {
-      _ratesData = RatesData.fromJson(response.body);
-      if (_ratesData != null && _ratesData!.rates.containsKey(to.code)) {
-        _rate = _ratesData?.rates[to.code];
-        notifyListeners();
-      }
+    _ratesData = await _loadRates(from);
+    if (_ratesData != null && _ratesData!.rates.containsKey(to.code)) {
+      _rate = _ratesData?.rates[to.code];
+      notifyListeners();
     }
   }
 
-  void _convert() {
-    _evalController.add(((_lastCalc ?? 0) * (_rate ?? 1)).toString());
+  Future<void> loadInverseRates() async {
+    _inverseRatesData = await _loadRates(to, inverse: true);
+  }
+
+  Future<RatesData?> _loadRates(Currency base, {bool inverse = false}) async {
+    final String symbols =
+        currencies.getAll().map((Currency currency) => currency.code).join(',');
+    final http.Response response = await http.get(Uri.parse(
+        'https://api.exchangerate.host/latest?symbols=$symbols&base=${base.code}'));
+
+    if (response.statusCode == 200) {
+      return RatesData.fromJson(response.body, inverse: inverse);
+    }
+
+    return null;
   }
 }
 
@@ -152,18 +169,19 @@ class RatesData {
 
   final Map<String, double> rates;
 
-  static RatesData? fromJson(String json) {
+  static RatesData? fromJson(String json, {bool inverse = false}) {
     final Map<String, dynamic> result = jsonDecode(json);
 
     if (!(result['success'] as bool)) {
       return null;
     }
 
-    return RatesData((result['rates'] as Map<String, dynamic>).map(
-        (key, value) => MapEntry(
-            key,
-            value.runtimeType == int
-                ? (value as int).toDouble()
-                : value as double)));
+    return RatesData(
+        (result['rates'] as Map<String, dynamic>).map((key, value) {
+      final double result = value.runtimeType == int
+          ? (value as int).toDouble()
+          : value as double;
+      return MapEntry(key, inverse ? 1.0 / result : result);
+    }));
   }
 }

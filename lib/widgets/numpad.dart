@@ -1,3 +1,4 @@
+import 'package:currency_picker/currency_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../common/calc_symbols.dart';
@@ -23,10 +24,9 @@ class NumPad extends StatelessWidget {
 
       int numValue = 9;
       final TextStyle textStyle = GoogleFonts.poppins(
-        textStyle: TextStyle(
-          fontSize: buttonWidth * 0.5,
-        )
-      );
+          textStyle: TextStyle(
+        fontSize: buttonWidth * 0.5,
+      ));
 
       buttons.add(
         NumPadButton(
@@ -37,16 +37,27 @@ class NumPad extends StatelessWidget {
         ),
       );
 
-      for (int i = 0; i < 3; i++) {
+      for (String? code in ['USD', 'EUR', null]) {
         buttons.add(
           NumPadButton(
             width: buttonWidth,
-            onPressed: () => CurrencyPicker.show(context),
+            onPressed: () async {
+              Currency? result;
+
+              if (code == null) {
+                result = await CurrencyPicker.show(context);
+              } else {
+                result = ConvertPipe().currencies.findByCode(code);
+              }
+
+              if (result != null) {
+                ConvertPipe().emit(CalcSymbolCurrency(result));
+              }
+            },
             child: Text('', style: textStyle),
           ),
         );
       }
-
 
       for (int row = 0; row < 3; row++) {
         for (int col = 2; col >= 0; col--) {
@@ -108,7 +119,6 @@ class NumPad extends StatelessWidget {
           child: Text(mathSymbols.last.toString(), style: textStyle),
         ),
       );
-
 
       return Material(
         color: Colors.transparent,
