@@ -68,6 +68,10 @@ class _MainPageState extends State<MainPage> {
                             CurrencyPickerButton(
                               size: size.maxHeight / 15,
                               currency: ConvertPipe().from,
+                              suffix: Icon(
+                                Icons.arrow_forward_ios,
+                                size: size.maxHeight / 20,
+                              ),
                               onChanged: (currency) =>
                                   ConvertPipe().from = currency,
                             )
@@ -97,13 +101,16 @@ class _MainPageState extends State<MainPage> {
                           ),
                           Align(
                             alignment: Alignment.centerRight,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Wrap(
+                              spacing: 4,
                               children: [
                                 CurrencyPickerButton(
                                   size: size.maxHeight / 15,
                                   currency: ConvertPipe().to,
+                                  prefix: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: size.maxHeight / 20,
+                                  ),
                                   onChanged: (currency) =>
                                       ConvertPipe().to = currency,
                                 ),

@@ -165,10 +165,14 @@ class CurrencyPickerButton extends StatefulWidget {
     required this.currency,
     required this.size,
     required this.onChanged,
+    this.prefix,
+    this.suffix,
   }) : super(key: key);
 
   final Currency currency;
   final double size;
+  final Widget? prefix;
+  final Widget? suffix;
   final Function(Currency) onChanged;
 
   @override
@@ -186,10 +190,28 @@ class _CurrencyPickerButtonState extends State<CurrencyPickerButton> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> view = [];
+
+    if (widget.prefix != null) {
+      view.add(widget.prefix!);
+    }
+
+    view.add(Text(
+      currency!.code,
+      style: GoogleFonts.poppins(fontSize: widget.size),
+    ));
+
+    if (widget.suffix != null) {
+      view.add(widget.suffix!);
+    }
+
     return TextButton(
         style: TextButton.styleFrom(
+            backgroundColor: const Color(0x11FFFFFF),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(widget.size)),
             minimumSize: Size.zero,
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
             primary: const Color(0xFFAEAEAE)),
         onPressed: () {
           CurrencyPicker.show(context).then((value) {
@@ -203,9 +225,10 @@ class _CurrencyPickerButtonState extends State<CurrencyPickerButton> {
             });
           });
         },
-        child: Text(
-          currency!.code,
-          style: GoogleFonts.poppins(fontSize: widget.size),
+        child: Wrap(
+          spacing: 4,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: view,
         ));
   }
 }
