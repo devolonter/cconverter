@@ -52,7 +52,7 @@ class NumPad extends StatelessWidget {
       buttons.add(
         NumPadButton(
           width: buttonWidth,
-          onPressed: () => true,
+          onPressed: () => ConvertPipe().switchConversion(),
           child: Icon(
             Icons.switch_left,
             size: buttonWidth * 0.55,

@@ -17,6 +17,8 @@ class ConvertPipe extends ChangeNotifier {
   final StreamController<CalcSymbol> _numPadController =
       StreamController<CalcSymbol>();
   final StreamController<String> _evalController = StreamController<String>();
+  final StreamController<List<Currency>> _dirController =
+      StreamController<List<Currency>>.broadcast();
 
   Currency? _from;
   Currency? _to;
@@ -31,6 +33,7 @@ class ConvertPipe extends ChangeNotifier {
 
   Stream<CalcSymbol> get input => _numPadController.stream;
   Stream<String> get output => _evalController.stream;
+  Stream<List<Currency>> get direction => _dirController.stream;
   String? get rate => (_rate != null) ? _format.format(_rate) : null;
 
   Currency get from {
@@ -72,6 +75,14 @@ class ConvertPipe extends ChangeNotifier {
 
   factory ConvertPipe() {
     return _instance;
+  }
+
+  void switchConversion() {
+    final Currency from = this.from;
+    this.from = to;
+    to = from;
+    eval(_lastExpression);
+    _dirController.add([this.from, to]);
   }
 
   String format(String? value, {bool stripDecimalSeparator = true}) {

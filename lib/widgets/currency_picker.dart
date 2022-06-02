@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -181,11 +183,23 @@ class CurrencyPickerButton extends StatefulWidget {
 
 class _CurrencyPickerButtonState extends State<CurrencyPickerButton> {
   Currency? currency;
+  StreamSubscription? listener;
 
   @override
   void initState() {
     super.initState();
     currency = widget.currency;
+
+    if (listener != null) {
+      return;
+    }
+
+    final int index = currency == ConvertPipe().from ? 0 : 1;
+    listener = ConvertPipe().direction.listen((dir) {
+      setState(() {
+        currency = dir[index];
+      });
+    });
   }
 
   @override
