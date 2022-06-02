@@ -1,20 +1,25 @@
 import 'dart:io';
 
+import 'package:currency_picker/currency_picker.dart';
 import 'package:intl/intl.dart';
 
 class CalcSymbol {
   CalcSymbol(this.symbol);
 
-  final String symbol;
+  final dynamic symbol;
 
   @override
   String toString() {
-    return symbol;
+    return (symbol is Currency) ? symbol.code : symbol as String;
   }
 
   String toMath() {
     return '';
   }
+}
+
+class CalcSymbolCurrency extends CalcSymbol {
+  CalcSymbolCurrency(dynamic symbol) : super(symbol);
 }
 
 class CalcSymbolDot extends CalcSymbol {
