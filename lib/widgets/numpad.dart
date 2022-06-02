@@ -37,27 +37,47 @@ class NumPad extends StatelessWidget {
         ),
       );
 
-      for (String? code in ['USD', 'EUR', null]) {
-        buttons.add(
-          NumPadButton(
-            width: buttonWidth,
-            onPressed: () async {
-              Currency? result;
-
-              if (code == null) {
-                result = await CurrencyPicker.show(context);
-              } else {
-                result = ConvertPipe().currencies.findByCode(code);
-              }
-
-              if (result != null) {
-                ConvertPipe().emit(CalcSymbolCurrency(result));
-              }
-            },
-            child: Text('', style: textStyle),
+      buttons.add(
+        NumPadButton(
+          width: buttonWidth,
+          onPressed: () => ConvertPipe().emit(CalcSymbolBackspace()),
+          color: const Color(0xFFFEA00A),
+          child: Icon(
+            Icons.arrow_back_ios,
+            size: buttonWidth * 0.45,
           ),
-        );
-      }
+        ),
+      );
+
+      buttons.add(
+        NumPadButton(
+          width: buttonWidth,
+          onPressed: () => true,
+          child: Icon(
+            Icons.switch_left,
+            size: buttonWidth * 0.55,
+            color: Colors.white.withOpacity(0.5),
+          ),
+        ),
+      );
+
+      buttons.add(
+        NumPadButton(
+          width: buttonWidth,
+          onPressed: () async {
+            Currency? currency = await CurrencyPicker.show(context);
+
+            if (currency != null) {
+              ConvertPipe().emit(CalcSymbolCurrency(currency));
+            }
+          },
+          child: Icon(
+            Icons.monetization_on,
+            size: buttonWidth * 0.55,
+            color: Colors.white.withOpacity(0.5),
+          ),
+        ),
+      );
 
       for (int row = 0; row < 3; row++) {
         for (int col = 2; col >= 0; col--) {
