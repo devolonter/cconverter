@@ -139,7 +139,9 @@ class _CalcStackState extends State<CalcStack> {
       if (interactiveExpression.isNotEmpty) {
         setState(() {
           interactiveExpression.removeLast();
-          value = (interactiveExpression.removeLast() as NumValue).value;
+          interactiveValue = (interactiveExpression.removeLast() as NumValue);
+          value = interactiveValue!.value;
+          valueCurrency = null;
         });
       }
 
