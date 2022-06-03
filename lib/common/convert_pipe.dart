@@ -43,8 +43,8 @@ class ConvertPipe extends ChangeNotifier {
 
     final String? name =
         NumberFormat.simpleCurrency(locale: Platform.localeName).currencyName;
-    final Currency? result =
-        _currencyService.findByCode(name) ?? _currencyService.findByCode('USD');
+    final Currency? result = _currencyService.findByCode('USD') ??
+        _currencyService.findByCode('USD');
 
     _from = result!;
     return result;
@@ -101,9 +101,10 @@ class ConvertPipe extends ChangeNotifier {
 
   double toDouble(String value) {
     return value.isNotEmpty
-        ? double.parse(
-            double.parse(value.replaceAll(_format.symbols.GROUP_SEP, ''))
-                .toStringAsFixed(2))
+        ? double.parse(double.parse(value
+                .replaceAll(_format.symbols.GROUP_SEP, '')
+                .replaceAll(_format.symbols.DECIMAL_SEP, '.'))
+            .toStringAsFixed(2))
         : 0;
   }
 
