@@ -99,6 +99,11 @@ class ConvertPipe extends ChangeNotifier {
 
   String format(String? value, {bool stripDecimalSeparator = true}) {
     value ??= '';
+
+    if (value == '00' || value == '000') {
+      value = '0.';
+    }
+
     String formattedValue = _format.format(toDouble(value));
 
     if ((value.length == 3 || value.length == 4) &&
