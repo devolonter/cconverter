@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
@@ -219,30 +220,36 @@ class _CurrencyPickerButtonState extends State<CurrencyPickerButton> {
       view.add(widget.suffix!);
     }
 
-    return TextButton(
-        style: TextButton.styleFrom(
-            backgroundColor: const Color(0x11FFFFFF),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(widget.size)),
-            minimumSize: Size.zero,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-            primary: const Color(0xFFAEAEAE)),
-        onPressed: () {
-          CurrencyPicker.show(context).then((value) {
-            if (value == null) {
-              return;
-            }
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          vertical: (Platform.isWindows || Platform.isLinux || Platform.isMacOS)
+              ? 8
+              : 0),
+      child: TextButton(
+          style: TextButton.styleFrom(
+              backgroundColor: const Color(0x11FFFFFF),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(widget.size)),
+              minimumSize: Size.zero,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+              primary: const Color(0xFFAEAEAE)),
+          onPressed: () {
+            CurrencyPicker.show(context).then((value) {
+              if (value == null) {
+                return;
+              }
 
-            widget.onChanged(value);
-            setState(() {
-              currency = value;
+              widget.onChanged(value);
+              setState(() {
+                currency = value;
+              });
             });
-          });
-        },
-        child: Wrap(
-          spacing: 4,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: view,
-        ));
+          },
+          child: Wrap(
+            spacing: 4,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: view,
+          )),
+    );
   }
 }
