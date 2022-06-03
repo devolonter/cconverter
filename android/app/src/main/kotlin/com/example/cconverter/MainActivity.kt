@@ -1,4 +1,4 @@
-package com.geekinfox.studio.cconverter
+package com.devolonter.cconverter
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.geekinfox.studio.cconverter">
+    package="com.devolonter.cconverter">
    <application
         android:label="cconverter"
         android:name="${applicationName}"

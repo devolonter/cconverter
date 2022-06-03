@@ -8,7 +8,7 @@
 PRODUCT_NAME = cconverter
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.geekinfox.studio.cconverter
+PRODUCT_BUNDLE_IDENTIFIER = com.devolonter.cconverter
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2022 com.geekinfox.studio. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2022 com.devolonter. All rights reserved.
