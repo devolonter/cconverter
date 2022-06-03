@@ -100,7 +100,13 @@ class ConvertPipe extends ChangeNotifier {
   String format(String? value, {bool stripDecimalSeparator = true}) {
     value ??= '';
     String formattedValue = _format.format(toDouble(value));
-    String dot = CalcSymbolDot().symbol;
+
+    if ((value.length == 3 || value.length == 4) &&
+        formattedValue.length == 1) {
+      formattedValue = '$formattedValue${_format.symbols.DECIMAL_SEP}0';
+    }
+
+    String dot = CalcSymbolDot().toString();
 
     if (!stripDecimalSeparator) {
       if (value.contains(dot) && !formattedValue.contains(dot)) {
@@ -129,7 +135,7 @@ class ConvertPipe extends ChangeNotifier {
     expression = expression.toList();
 
     if (tail != null) {
-      if (tail != '0' && tail != '0.') {
+      if (tail != '0' && tail != '0${_format.symbols.DECIMAL_SEP}') {
         expression.add(tail);
       } else if (expression.isNotEmpty) {
         expression = expression.sublist(0, expression.length - 1);
@@ -148,7 +154,8 @@ class ConvertPipe extends ChangeNotifier {
 
     final Expression calc = Expression(expression.map((e) {
       if (e is String) {
-        if ((prevSymbol != null) && (prevSymbol == MathSymbolMul() || prevSymbol == MathSymbolDiv())) {
+        if ((prevSymbol != null) &&
+            (prevSymbol == MathSymbolMul() || prevSymbol == MathSymbolDiv())) {
           return toDouble(e);
         }
 
