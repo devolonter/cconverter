@@ -91,7 +91,7 @@ class _MainPageState extends State<MainPage> {
                                 return Text(
                                   pipe.rate != null
                                       ? '1 ${pipe.from.code} = ${pipe.rate} ${pipe.to.code}'
-                                      : '...',
+                                      : 'Exchange rates loading...',
                                   style: TextStyle(
                                       color: const Color(0xFFA5A5A5),
                                       fontSize: size.maxHeight / 18),
