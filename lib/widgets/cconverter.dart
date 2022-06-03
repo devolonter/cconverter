@@ -152,14 +152,9 @@ class CConverter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (Platform.isIOS)
-        ? const CupertinoApp(
-            debugShowCheckedModeBanner: false,
-            home: MainPage(),
-          )
-        : const MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: MainPage(),
-          );
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MainPage(),
+    );
   }
 }

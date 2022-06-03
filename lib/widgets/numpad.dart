@@ -141,11 +141,13 @@ class NumPad extends StatelessWidget {
         ),
       );
 
-      return Material(
-        color: Colors.transparent,
-        child: Wrap(
-          runSpacing: 16,
-          children: buttons,
+      return SizedBox(
+        width: size.maxWidth,
+        child: Center(
+          child: Wrap(
+              runSpacing: 16,
+              children: buttons,
+            ),
         ),
       );
     });
@@ -168,15 +170,18 @@ class NumPadButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      shape: const CircleBorder(),
-      height: width,
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      color: color,
-      elevation: 2,
-      highlightElevation: 0,
-      onPressed: onPressed,
-      child: child,
+    return SizedBox(
+      width: width + 16,
+      child: MaterialButton(
+        shape: const CircleBorder(),
+        height: width,
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        color: color,
+        elevation: 2,
+        highlightElevation: 0,
+        onPressed: onPressed,
+        child: child,
+      ),
     );
   }
 }

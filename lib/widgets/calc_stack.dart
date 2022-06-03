@@ -94,11 +94,8 @@ class _CalcStackState extends State<CalcStack> {
       }
     }
 
-    ConvertPipe().eval(
-        expression,
-        valueCurrency == null
-            ? value
-            : [value, valueCurrency!.code]);
+    ConvertPipe().eval(expression,
+        valueCurrency == null ? value : [value, valueCurrency!.code]);
   }
 
   @override
@@ -197,7 +194,8 @@ class NumValue extends StatelessWidget {
           symbol,
           style: TextStyle(
               color: const Color(0xFFFEA00A),
-              fontSize: currencySize != null ? currencySize! * 0.5 : null),
+              fontSize:
+                  currencySize != null ? max(currencySize! * 0.5, 12) : null),
         ),
         displayNum
       ],
