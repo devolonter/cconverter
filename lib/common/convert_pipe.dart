@@ -144,14 +144,21 @@ class ConvertPipe extends ChangeNotifier {
       return;
     }
 
+    CalcSymbol? prevSymbol;
+
     final Expression calc = Expression(expression.map((e) {
       if (e is String) {
+        if ((prevSymbol != null) && (prevSymbol == MathSymbolMul() || prevSymbol == MathSymbolDiv())) {
+          return toDouble(e);
+        }
+
         return (toDouble(e) * (_rate ?? 1));
       } else if (e is List<dynamic>) {
         return (toDouble(e[0]) * _inverseRatesData!.rates[e[1]]!.toDouble());
       }
 
-      return (e as CalcSymbol).toMath();
+      prevSymbol = e;
+      return prevSymbol!.toMath();
     }).join());
 
     _lastCalc = calc.eval()?.toDouble();
