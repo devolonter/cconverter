@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:currency_picker/currency_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,6 +8,7 @@ import '../common/calc_symbols.dart';
 import 'package:flutter/material.dart';
 
 import '../common/convert_pipe.dart';
+import '../main.dart';
 import 'currency_picker.dart';
 
 class NumPad extends StatelessWidget {
@@ -14,7 +17,8 @@ class NumPad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, size) {
-      final double buttonWidth = size.maxWidth / 4.0 - 16;
+      final double containerWidth = min(size.maxWidth, Config.width * 1.25);
+      final double buttonWidth = containerWidth / 4.0 - 16;
       final List<Widget> buttons = [];
       final List<CalcSymbol> mathSymbols = [
         MathSymbolDiv(),
@@ -142,7 +146,7 @@ class NumPad extends StatelessWidget {
       );
 
       return SizedBox(
-        width: size.maxWidth,
+        width: containerWidth,
         child: Center(
           child: Wrap(
               runSpacing: 16,
