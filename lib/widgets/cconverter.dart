@@ -114,11 +114,17 @@ class _MainPageState extends State<MainPage> {
                                 StreamBuilder<String>(
                                     stream: ConvertPipe().output,
                                     builder: (context, snapshot) {
-                                      return NumValue(
-                                        value:
-                                            ConvertPipe().format(snapshot.data),
-                                        fontSize: size.maxHeight / 6,
-                                        color: const Color(0xFFF1A43C),
+                                      final String value =
+                                          ConvertPipe().format(snapshot.data);
+
+                                      return GestureDetector(
+                                        onTap: () => Clipboard.setData(
+                                            ClipboardData(text: value)),
+                                        child: NumValue(
+                                          value: value,
+                                          fontSize: size.maxHeight / 6,
+                                          color: const Color(0xFFF1A43C),
+                                        ),
                                       );
                                     }),
                               ],
