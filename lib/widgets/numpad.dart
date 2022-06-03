@@ -1,4 +1,5 @@
 import 'package:currency_picker/currency_picker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../common/calc_symbols.dart';
@@ -53,9 +54,9 @@ class NumPad extends StatelessWidget {
         NumPadButton(
           width: buttonWidth,
           onPressed: () => ConvertPipe().switchConversion(),
-          child: Icon(
-            Icons.switch_left,
-            size: buttonWidth * 0.55,
+          child: FaIcon(
+            FontAwesomeIcons.arrowRightArrowLeft,
+            size: buttonWidth * 0.5,
             color: Colors.white.withOpacity(0.5),
           ),
         ),
@@ -71,9 +72,9 @@ class NumPad extends StatelessWidget {
               ConvertPipe().emit(CalcSymbolCurrency(currency));
             }
           },
-          child: Icon(
-            Icons.monetization_on,
-            size: buttonWidth * 0.55,
+          child: FaIcon(
+            FontAwesomeIcons.earthAmericas,
+            size: buttonWidth * 0.5,
             color: Colors.white.withOpacity(0.5),
           ),
         ),
