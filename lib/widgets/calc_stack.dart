@@ -141,6 +141,10 @@ class _CalcStackState extends State<CalcStack> {
           interactiveExpression.removeLast();
           interactiveValue = (interactiveExpression.removeLast() as NumValue);
           value = interactiveValue!.value;
+          valueCurrency = interactiveValue!.currency;
+        });
+      } else {
+        setState(() {
           valueCurrency = null;
         });
       }
