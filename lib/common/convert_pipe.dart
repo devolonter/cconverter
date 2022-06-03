@@ -43,8 +43,8 @@ class ConvertPipe extends ChangeNotifier {
 
     final String? name =
         NumberFormat.simpleCurrency(locale: Platform.localeName).currencyName;
-    final Currency? result = _currencyService.findByCode('USD') ??
-        _currencyService.findByCode('USD');
+    final Currency? result =
+        _currencyService.findByCode(name) ?? _currencyService.findByCode('USD');
 
     _from = result!;
     return result;
@@ -52,6 +52,12 @@ class ConvertPipe extends ChangeNotifier {
 
   set from(Currency value) {
     _from = value;
+    if (_from == _to) {
+      to = (_from!.code != 'USD'
+          ? _currencyService.findByCode('USD')
+          : _currencyService.findByCode('EUR'))!;
+      _dirController.add([from, to]);
+    }
     loadRates().then((value) => eval(_lastExpression));
   }
 
@@ -68,7 +74,13 @@ class ConvertPipe extends ChangeNotifier {
 
   set to(Currency value) {
     _to = value;
-    loadRates().then((value) => eval(_lastExpression));
+    if (_from == _to) {
+      from = (_to!.code != 'USD'
+          ? _currencyService.findByCode('USD')
+          : _currencyService.findByCode('EUR'))!;
+      _dirController.add([from, to]);
+    }
+    loadInverseRates().then((value) => eval(_lastExpression));
   }
 
   CurrencyService get currencies => _currencyService;
