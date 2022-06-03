@@ -1,5 +1,5 @@
-name: cconverter
-description: A new Flutter project.
+name: CConverter
+description: Multi-currency converter
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -57,6 +57,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  icons_launcher: ^1.1.9
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -99,3 +100,13 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_icons:
+  ios: true
+  android: true
+  macos: true
+  windows: true
+  linux: true
+  image_path: "assets/launcher/icon.png"
+  adaptive_icon_background: "assets/launcher/bg.png"
+  adaptive_icon_foreground: "assets/launcher/fg.png"
