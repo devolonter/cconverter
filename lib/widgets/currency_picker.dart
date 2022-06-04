@@ -32,7 +32,16 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
 
   List<Currency> get currencies {
     if (search == null || search!.isEmpty) {
-      return ConvertPipe().currencies.getAll();
+      final List<Currency> result = ConvertPipe().currencies.getAll();
+      final Currency? userCurrency = ConvertPipe().userCurrency;
+
+      if (userCurrency != null) {
+        //move user currency to front
+        result.remove(userCurrency);
+        result.insert(0, userCurrency);
+      }
+
+      return result;
     }
 
     List<Currency> result = [];

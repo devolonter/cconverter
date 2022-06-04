@@ -35,14 +35,15 @@ class ConvertPipe extends ChangeNotifier {
   Stream<String> get output => _evalController.stream;
   Stream<List<Currency>> get direction => _dirController.stream;
   String? get rate => (_rate != null) ? _format.format(_rate) : null;
+  Currency? get userCurrency =>
+      _currencyService.findByCode(_format.currencySymbol);
 
   Currency get from {
     if (_from != null) {
       return _from!;
     }
 
-    final String? name =
-        NumberFormat.simpleCurrency(locale: Platform.localeName).currencyName;
+    final String? name = _format.currencyName;
     final Currency? result =
         _currencyService.findByCode(name) ?? _currencyService.findByCode('USD');
 
