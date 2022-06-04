@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -63,11 +65,11 @@ class _MainPageState extends State<MainPage> {
                         children: [
                           Row(children: [
                             CurrencyPickerButton(
-                              size: size.maxHeight / 15,
+                              size: min(size.maxHeight / 15, 16),
                               currency: ConvertPipe().from,
                               suffix: Icon(
                                 Icons.arrow_forward_ios,
-                                size: size.maxHeight / 20,
+                                size: min(size.maxHeight / 20, 12),
                               ),
                               onChanged: (currency) =>
                                   ConvertPipe().from = currency,
@@ -91,44 +93,45 @@ class _MainPageState extends State<MainPage> {
                                       : 'Exchange rates loading...',
                                   style: TextStyle(
                                       color: const Color(0xFFA5A5A5),
-                                      fontSize: size.maxHeight / 18),
+                                      fontSize: min(size.maxHeight / 18, 16)),
                                 );
                               }),
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Wrap(
-                              spacing: 4,
-                              children: [
-                                CurrencyPickerButton(
-                                  size: size.maxHeight / 15,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4.0),
+                                child: CurrencyPickerButton(
+                                  size: min(size.maxHeight / 15, 16),
                                   currency: ConvertPipe().to,
                                   prefix: Icon(
                                     Icons.arrow_forward_ios,
-                                    size: size.maxHeight / 20,
+                                    size: min(size.maxHeight / 20, 12),
                                   ),
                                   onChanged: (currency) =>
                                       ConvertPipe().to = currency,
                                 ),
-                                StreamBuilder<String>(
-                                    stream: ConvertPipe().output,
-                                    builder: (context, snapshot) {
-                                      final String value =
-                                          ConvertPipe().format(snapshot.data);
+                              ),
+                              StreamBuilder<String>(
+                                  stream: ConvertPipe().output,
+                                  builder: (context, snapshot) {
+                                    final String value =
+                                        ConvertPipe().format(snapshot.data);
 
-                                      return GestureDetector(
-                                        onTap: () => Clipboard.setData(
-                                            ClipboardData(text: value)),
-                                        child: NumValue(
-                                          value: value,
-                                          fontSize: size.maxHeight / 6,
-                                          color: const Color(0xFFF1A43C),
-                                        ),
-                                      );
-                                    }),
-                              ],
-                            ),
+                                    return GestureDetector(
+                                      onTap: () => Clipboard.setData(
+                                          ClipboardData(text: value)),
+                                      child: NumValue(
+                                        value: value,
+                                        fontSize: min(size.maxHeight / 6, 42),
+                                        color: const Color(0xFFF1A43C),
+                                      ),
+                                    );
+                                  }),
+                            ],
                           ),
                         ],
                       );
