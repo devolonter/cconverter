@@ -110,8 +110,10 @@ class ConvertPipe extends ChangeNotifier {
 
     String formattedValue = _format.format(toDouble(value));
 
-    if ((value.length == 3 || value.length == 4) &&
-        formattedValue.length == 1) {
+    if (value.length >= 3 &&
+        value.endsWith('0') &&
+        value.substring(value.length - 3, value.length - 1) ==
+            '0${_format.symbols.DECIMAL_SEP}') {
       formattedValue = '$formattedValue${_format.symbols.DECIMAL_SEP}0';
     }
 
