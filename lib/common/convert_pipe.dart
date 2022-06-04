@@ -94,11 +94,16 @@ class ConvertPipe extends ChangeNotifier {
   }
 
   void switchConversion() {
-    final Currency from = this.from;
-    this.from = to;
-    to = from;
-    eval(_lastExpression);
-    _dirController.add([this.from, to]);
+    final Currency from = _from!;
+    _from = _to;
+    _to = from;
+
+    Future.wait([loadInverseRates(), loadRates()]).then((value) {
+      _rate = _ratesData?.rates[_to!.code];
+      eval(_lastExpression);
+    });
+
+    _dirController.add([_from!, _to!]);
   }
 
   String format(String? value, {bool stripDecimalSeparator = true}) {
