@@ -81,7 +81,10 @@ class ConvertPipe extends ChangeNotifier {
           : _currencyService.findByCode('EUR'))!;
       _dirController.add([from, to]);
     }
+
     loadInverseRates().then((value) => eval(_lastExpression));
+    _rate = _ratesData?.rates[_to!.code];
+    notifyListeners();
   }
 
   CurrencyService get currencies => _currencyService;
