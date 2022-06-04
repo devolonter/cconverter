@@ -200,8 +200,9 @@ class NumValue extends StatelessWidget {
           symbol,
           style: TextStyle(
               color: const Color(0xFFFEA00A),
-              fontSize:
-                  currencySize != null ? max(currencySize! * 0.5, 12) : null),
+              fontSize: currencySize != null
+                  ? (currencySize! * 0.5).clamp(12, 15)
+                  : null),
         ),
         displayNum
       ],

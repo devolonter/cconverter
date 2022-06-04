@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
@@ -222,7 +223,7 @@ class _CurrencyPickerButtonState extends State<CurrencyPickerButton> {
 
     view.add(Text(
       currency!.code,
-      style: GoogleFonts.poppins(fontSize: widget.size),
+      style: GoogleFonts.poppins(fontSize: min(widget.size, 18)),
     ));
 
     if (widget.suffix != null) {
