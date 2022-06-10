@@ -98,7 +98,7 @@ class ConvertPipe extends ChangeNotifier {
     _from = _to;
     _to = from;
 
-    Future.wait([loadInverseRates(), loadRates()]).then((value) {
+    Future.wait([loadInverseRates(), loadRates()]).then((_) {
       _rate = _ratesData?.rates[_to!.code];
       eval(_lastExpression);
     });
