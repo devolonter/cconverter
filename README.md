@@ -1,6 +1,4 @@
 # CConverter
-> This project was created to demonstrate my skills in Flutter. I'm looking for a job
-
 Currency converter that supports expressions
 
 <img src="https://user-images.githubusercontent.com/225176/173121191-9ef39b13-53db-43c6-9bdb-26b979bff450.png" width=128> <img src="https://user-images.githubusercontent.com/225176/173121188-30053b24-b7dd-4f38-a3a0-0d168d1156c6.png" width=128> <img src="https://user-images.githubusercontent.com/225176/173121184-a938b540-75b3-4ca1-910e-82e53310d55e.png" width=128>
