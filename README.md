@@ -10,5 +10,7 @@ Currency converter that supports expressions
 - Change direction with one button 
 - Automatic recalculation of the expression after a currency change
 
+## Design by
+[Aleka Kalm](https://www.behance.net/alekakalm)
 
-<a href="https://apps.apple.com/pl/app/multi-cconverter/id1627810516"><img src="https://user-images.githubusercontent.com/225176/173121357-339c8cc1-fa66-4565-9825-16d01b0b5a2e.png" height=64></a> <a href="https://play.google.com/store/apps/details?id=com.devolonter.cconverter"><img src="https://user-images.githubusercontent.com/225176/173122801-3125d2b3-6a7c-41e5-a837-8cf69ed1677a.png" height=64></a>
+<a href="https://apps.apple.com/pl/app/multi-cconverter/id1627810516"><img src="https://user-images.githubusercontent.com/225176/173121357-339c8cc1-fa66-4565-9825-16d01b0b5a2e.png" height=48></a> <a href="https://play.google.com/store/apps/details?id=com.devolonter.cconverter"><img src="https://user-images.githubusercontent.com/225176/173122801-3125d2b3-6a7c-41e5-a837-8cf69ed1677a.png" height=48></a>
