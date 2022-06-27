@@ -49,9 +49,9 @@ class _MainPageState extends State<MainPage> {
       data: ThemeData.from(
         colorScheme: const ColorScheme.dark(),
       ),
-      child: SafeArea(
-        child: Container(
-            color: bgColor,
+      child: Container(
+        color: bgColor,
+        child: SafeArea(
             child: Column(
               children: [
                 Expanded(
