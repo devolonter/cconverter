@@ -137,12 +137,12 @@ class ConvertPipe extends ChangeNotifier {
   }
 
   double toDouble(String value) {
-    return value.isNotEmpty
-        ? double.parse(double.parse(value
-                .replaceAll(_format.symbols.GROUP_SEP, '')
-                .replaceAll(_format.symbols.DECIMAL_SEP, '.'))
-            .toStringAsFixed(2))
-        : 0;
+    return double.tryParse((double.tryParse(value
+                    .replaceAll(_format.symbols.GROUP_SEP, '')
+                    .replaceAll(_format.symbols.DECIMAL_SEP, '.')) ??
+                0)
+            .toStringAsFixed(2)) ??
+        0;
   }
 
   void emit(CalcSymbol symbol) {
