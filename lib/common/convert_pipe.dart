@@ -27,8 +27,10 @@ class ConvertPipe extends ChangeNotifier {
   double? _rate;
   List<dynamic> _lastExpression = [];
   double? _lastCalc;
+  CalcSymbol? prevSymbol;
 
-  final NumberFormat _format = NumberFormat.decimalPattern(Platform.localeName);
+  final NumberFormat _format =
+      NumberFormat.decimalPattern(Platform.localeName.split('_')[1]);
   final CurrencyService _currencyService = CurrencyService();
 
   Stream<CalcSymbol> get input => _numPadController.stream;
@@ -37,6 +39,7 @@ class ConvertPipe extends ChangeNotifier {
   String? get rate => (_rate != null) ? _format.format(_rate) : null;
   Currency? get userCurrency =>
       _currencyService.findByCode(_format.currencySymbol);
+  String get decimalSeparator => _format.symbols.DECIMAL_SEP;
 
   Currency get from {
     if (_from != null) {
@@ -165,8 +168,6 @@ class ConvertPipe extends ChangeNotifier {
       _lastCalc = null;
       return;
     }
-
-    CalcSymbol? prevSymbol;
 
     final Expression calc = Expression(expression.map((e) {
       if (e is String) {
