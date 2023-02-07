@@ -51,103 +51,111 @@ class _MainPageState extends State<MainPage> {
       ),
       child: Container(
         color: bgColor,
-        child: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: DefaultTextStyle(
-                    style: GoogleFonts.poppins(),
-                    child: LayoutBuilder(builder: (context, size) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(children: [
-                            CurrencyPickerButton(
-                              size: min(size.maxHeight / 15, 16),
-                              currency: ConvertPipe().from,
-                              suffix: Icon(
-                                Icons.arrow_forward_ios,
-                                size: min(size.maxHeight / 20, 12),
-                              ),
-                              onChanged: (currency) =>
-                                  ConvertPipe().from = currency,
-                            )
-                          ]),
-                          Expanded(
-                            child: CalcStack(
-                              input: ConvertPipe().input,
+        child: Column(
+          children: [
+            Expanded(
+                child: SafeArea(
+              bottom: false,
+              left: false,
+              right: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: DefaultTextStyle(
+                  style: GoogleFonts.poppins(),
+                  child: LayoutBuilder(builder: (context, size) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(children: [
+                          CurrencyPickerButton(
+                            size: min(size.maxHeight / 15, 16),
+                            currency: ConvertPipe().from,
+                            suffix: Icon(
+                              Icons.arrow_forward_ios,
+                              size: min(size.maxHeight / 20, 12),
                             ),
+                            onChanged: (currency) =>
+                                ConvertPipe().from = currency,
+                          )
+                        ]),
+                        Expanded(
+                          child: CalcStack(
+                            input: ConvertPipe().input,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0)
-                                .subtract(const EdgeInsets.only(bottom: 8)),
-                            child: ChangeNotifierProvider(
-                              create: (_) => ConvertPipe(),
-                              child: Consumer<ConvertPipe>(
-                                  builder: (context, pipe, child) {
-                                return Text(
-                                  pipe.rate != null
-                                      ? '1 ${pipe.from.code} = ${pipe.rate} ${pipe.to.code}'
-                                      : 'Exchange rates loading...',
-                                  style: TextStyle(
-                                      color: const Color(0xFFA5A5A5),
-                                      fontSize: min(size.maxHeight / 18, 16)),
-                                );
-                              }),
-                            ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0)
+                              .subtract(const EdgeInsets.only(bottom: 8)),
+                          child: ChangeNotifierProvider(
+                            create: (_) => ConvertPipe(),
+                            child: Consumer<ConvertPipe>(
+                                builder: (context, pipe, child) {
+                              return Text(
+                                pipe.rate != null
+                                    ? '1 ${pipe.from.code} = ${pipe.rate} ${pipe.to.code}'
+                                    : 'Exchange rates loading...',
+                                style: TextStyle(
+                                    color: const Color(0xFFA5A5A5),
+                                    fontSize: min(size.maxHeight / 18, 16)),
+                              );
+                            }),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 4.0),
-                                child: CurrencyPickerButton(
-                                  size: min(size.maxHeight / 15, 16),
-                                  currency: ConvertPipe().to,
-                                  prefix: Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: min(size.maxHeight / 20, 12),
-                                  ),
-                                  onChanged: (currency) =>
-                                      ConvertPipe().to = currency,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 4.0),
+                              child: CurrencyPickerButton(
+                                size: min(size.maxHeight / 15, 16),
+                                currency: ConvertPipe().to,
+                                prefix: Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: min(size.maxHeight / 20, 12),
                                 ),
+                                onChanged: (currency) =>
+                                    ConvertPipe().to = currency,
                               ),
-                              StreamBuilder<String>(
-                                  stream: ConvertPipe().output,
-                                  builder: (context, snapshot) {
-                                    final String value =
-                                        ConvertPipe().format(snapshot.data);
+                            ),
+                            StreamBuilder<String>(
+                                stream: ConvertPipe().output,
+                                builder: (context, snapshot) {
+                                  final String value =
+                                      ConvertPipe().format(snapshot.data);
 
-                                    return GestureDetector(
-                                      onTap: () => Clipboard.setData(
-                                          ClipboardData(text: value)),
-                                      child: NumValue(
-                                        value: value,
-                                        fontSize: min(size.maxHeight / 6, 42),
-                                        color: const Color(0xFFF1A43C),
-                                      ),
-                                    );
-                                  }),
-                            ],
-                          ),
-                        ],
-                      );
-                    }),
-                  ),
-                )),
-                Container(
-                    padding: const EdgeInsets.all(16),
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                        color: Color(0xFF3A3A3A),
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(16))),
-                    child: const Center(child: NumPad())),
-              ],
+                                  return GestureDetector(
+                                    onTap: () => Clipboard.setData(
+                                        ClipboardData(text: value)),
+                                    child: NumValue(
+                                      value: value,
+                                      fontSize: min(size.maxHeight / 6, 42),
+                                      color: const Color(0xFFF1A43C),
+                                    ),
+                                  );
+                                }),
+                          ],
+                        ),
+                      ],
+                    );
+                  }),
+                ),
+              ),
             )),
+            Container(
+                padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                    color: Color(0xFF3A3A3A),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(16))),
+                child: const SafeArea(
+                    top: false,
+                    left: false,
+                    right: false,
+                    child: Center(child: NumPad()))),
+          ],
+        ),
       ),
     );
   }
