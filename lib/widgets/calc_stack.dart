@@ -67,6 +67,12 @@ class _CalcStackState extends State<CalcStack> {
           }
         }
 
+        if (value.contains(CalcSymbolDot().toString())) {
+          if (!value.startsWith('0') && value.length == 4) {
+            return;
+          }
+        }
+
         setState(() {
           value = ConvertPipe()
               .format(value + symbol.toString(), stripDecimalSeparator: false);

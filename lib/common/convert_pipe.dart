@@ -29,24 +29,26 @@ class ConvertPipe extends ChangeNotifier {
   double? _lastCalc;
   CalcSymbol? prevSymbol;
 
-  final NumberFormat _format =
-      NumberFormat.decimalPattern(Platform.localeName.split('_')[1]);
+  final NumberFormat _fiatFormat =
+      NumberFormat('#,##0.##', Platform.localeName.split('_')[1]);
+  final NumberFormat _cryptoFormat =
+      NumberFormat('#,##0.${'#' * 16}', Platform.localeName.split('_')[1]);
   final CurrencyService _currencyService = CurrencyService();
 
   Stream<CalcSymbol> get input => _numPadController.stream;
   Stream<String> get output => _evalController.stream;
   Stream<List<Currency>> get direction => _dirController.stream;
-  String? get rate => (_rate != null) ? _format.format(_rate) : null;
+  String? get rate => (_rate != null) ? _cryptoFormat.format(_rate) : null;
   Currency? get userCurrency =>
-      _currencyService.findByCode(_format.currencySymbol);
-  String get decimalSeparator => _format.symbols.DECIMAL_SEP;
+      _currencyService.findByCode(_fiatFormat.currencySymbol);
+  String get decimalSeparator => _fiatFormat.symbols.DECIMAL_SEP;
 
   Currency get from {
     if (_from != null) {
       return _from!;
     }
 
-    final String? name = _format.currencyName;
+    final String? name = _fiatFormat.currencyName;
     final Currency? result =
         _currencyService.findByCode(name) ?? _currencyService.findByCode('USD');
 
@@ -116,13 +118,15 @@ class ConvertPipe extends ChangeNotifier {
       value = '0.';
     }
 
-    String formattedValue = _format.format(toDouble(value));
+    double doubleValue = toDouble(value);
+    NumberFormat format = doubleValue < 1 ? _cryptoFormat : _fiatFormat;
+    String formattedValue = format.format(doubleValue);
 
     if (value.length >= 3 &&
         value.endsWith('0') &&
         value.substring(value.length - 3, value.length - 1) ==
-            '0${_format.symbols.DECIMAL_SEP}') {
-      formattedValue = '$formattedValue${_format.symbols.DECIMAL_SEP}0';
+            '0${format.symbols.DECIMAL_SEP}') {
+      formattedValue = '$formattedValue${format.symbols.DECIMAL_SEP}0';
     }
 
     String dot = CalcSymbolDot().toString();
@@ -131,17 +135,27 @@ class ConvertPipe extends ChangeNotifier {
       if (value.contains(dot) && !formattedValue.contains(dot)) {
         formattedValue += dot;
       }
+
+      if (value.endsWith('0') && !formattedValue.endsWith('0')) {
+        formattedValue += '0';
+      }
+
+      if (format == _cryptoFormat && formattedValue.endsWith('0') && value.contains(dot)) {
+        formattedValue = formattedValue + '0' * (value.length - formattedValue.length);
+      }
     }
 
     return formattedValue;
   }
 
   double toDouble(String value) {
+    final int decimalRange = value.startsWith('0') ? 16 : 2;
+
     return double.tryParse((double.tryParse(value
-                    .replaceAll(_format.symbols.GROUP_SEP, '')
-                    .replaceAll(_format.symbols.DECIMAL_SEP, '.')) ??
+                    .replaceAll(_fiatFormat.symbols.GROUP_SEP, '')
+                    .replaceAll(_fiatFormat.symbols.DECIMAL_SEP, '.')) ??
                 0)
-            .toStringAsFixed(2)) ??
+            .toStringAsFixed(decimalRange)) ??
         0;
   }
 
@@ -154,7 +168,7 @@ class ConvertPipe extends ChangeNotifier {
     expression = expression.toList();
 
     if (tail != null) {
-      if (tail != '0' && tail != '0${_format.symbols.DECIMAL_SEP}') {
+      if (tail != '0' && tail != '0${_fiatFormat.symbols.DECIMAL_SEP}') {
         expression.add(tail);
       } else if (expression.isNotEmpty) {
         expression = expression.sublist(0, expression.length - 1);
