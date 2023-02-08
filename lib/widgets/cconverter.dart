@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../common/calc_symbols.dart';
 import '../common/convert_pipe.dart';
 import 'calc_stack.dart';
-import 'currency_picker.dart';
+import 'currency_picker_button.dart';
 import 'exchange_rate.dart';
 import 'exchange_result.dart';
 import 'numpad.dart';

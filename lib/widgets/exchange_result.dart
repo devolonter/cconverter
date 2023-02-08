@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 
 import '../common/convert_pipe.dart';
 import 'calc_stack.dart';
-import 'currency_picker.dart';
+import 'currency_picker_button.dart';
 
 class ExchangeResult extends StatelessWidget {
   const ExchangeResult({
