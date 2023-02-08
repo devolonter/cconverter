@@ -1,3 +1,4 @@
+import 'package:cconverter/common/settings.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,8 @@ class CurrencyButton extends StatelessWidget {
     return IconButton(
         padding: EdgeInsets.zero,
         onPressed: () {
+          Settings().addRecent(currency);
+
           Future.delayed(const Duration(milliseconds: 250)).then((value) {
             Navigator.pop(context, currency);
           });

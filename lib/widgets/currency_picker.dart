@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cconverter/common/settings.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -138,6 +139,32 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                   child: ListView(
                     shrinkWrap: true,
                     children: [
+                      if (Settings().recentlyUsed.isNotEmpty)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(left: 16),
+                              child: Text(
+                                'Recently used',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey),
+                              ),
+                            ),
+                            Wrap(
+                              children: Settings()
+                                  .recentlyUsed
+                                  .map((e) => CurrencyButton(
+                                        currency: e,
+                                        width: buttonWidth,
+                                      ))
+                                  .toList(),
+                            ),
+                            Divider()
+                          ],
+                        ),
                       Wrap(
                         children: currencies,
                       ),

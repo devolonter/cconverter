@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cconverter/common/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:window_size/window_size.dart';
@@ -14,6 +15,7 @@ class Config {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Settings().load();
 
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     final Rect screenFrame = (await getCurrentScreen())!.visibleFrame;
