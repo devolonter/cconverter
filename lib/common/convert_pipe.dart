@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:currency_picker/currency_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'calc_symbols.dart';
 
 class ConvertPipe extends ChangeNotifier {
@@ -24,6 +25,7 @@ class ConvertPipe extends ChangeNotifier {
   Currency? _to;
   RatesData? _ratesData;
   RatesData? _inverseRatesData;
+  Currency? _base;
   double? _rate;
   List<dynamic> _lastExpression = [];
   double? _lastCalc;
@@ -221,13 +223,48 @@ class ConvertPipe extends ChangeNotifier {
   }
 
   Future<RatesData?> _loadRates(Currency base, {bool inverse = false}) async {
-    final String symbols =
-        currencies.getAll().map((Currency currency) => currency.code).join(',');
-    final http.Response response = await http.get(Uri.parse(
-        'https://api.exchangerate.host/latest?symbols=$symbols&base=${base.code}'));
+    if (base == _base) {
+      if (inverse) {
+        return _inverseRatesData;
+      } else {
+        return _ratesData;
+      }
+    }
 
-    if (response.statusCode == 200) {
-      return RatesData.fromJson(response.body, inverse: inverse);
+    final String date = DateTime.now().toUtc().toIso8601String().substring(0, 10);
+    Directory dir = Directory('${(await getTemporaryDirectory()).path}/rates/${base.code}');
+
+    File file = File('${dir.path}/$date.json');
+    String? result;
+
+    if (await file.exists()) {
+      result = await file.readAsString();
+    } else {
+      final String symbols =
+          currencies.getAll().map((Currency currency) => currency.code).join(',');
+      final http.Response response = await http.get(Uri.parse(
+          'https://api.exchangerate.host/latest?symbols=$symbols&base=${base.code}'));
+
+      if (response.statusCode == 200) {
+        result = response.body;
+        await file.create(recursive: true);
+        file.writeAsString(result);
+      } else {
+        final List<FileSystemEntity> files = dir.listSync().toList();
+
+        if (files.isNotEmpty) {
+          files.sort((FileSystemEntity a, FileSystemEntity b) {
+            return b.statSync().modified.compareTo(a.statSync().modified);
+          });
+
+          result = await File(files.first.path).readAsString();
+        }
+      }
+    }
+
+    if (result != null) {
+      _base = base;
+      return RatesData.fromJson(result, inverse: inverse);
     }
 
     return null;
