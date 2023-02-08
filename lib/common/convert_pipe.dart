@@ -34,12 +34,14 @@ class ConvertPipe extends ChangeNotifier {
       NumberFormat('#,##0.##', Platform.localeName.split('_')[1]);
   final NumberFormat _cryptoFormat =
       NumberFormat('#,##0.${'#' * 16}', Platform.localeName.split('_')[1]);
+  final NumberFormat _rateFormat =
+    NumberFormat('#,##0.${'#' * 6}', Platform.localeName.split('_')[1]);
   final CurrencyService _currencyService = CurrencyService();
 
   Stream<CalcSymbol> get input => _numPadController.stream;
   Stream<String> get output => _evalController.stream;
   Stream<List<Currency>> get direction => _dirController.stream;
-  String? get rate => (_rate != null) ? _cryptoFormat.format(_rate) : null;
+  String? get rate => (_rate != null) ? _rateFormat.format(_rate) : null;
   Currency? get userCurrency =>
       _currencyService.findByCode(_fiatFormat.currencySymbol);
   String get decimalSeparator => _fiatFormat.symbols.DECIMAL_SEP;
@@ -227,7 +229,8 @@ class ConvertPipe extends ChangeNotifier {
   }
 
   Future<RatesData?> _loadRates(Currency base, {bool inverse = false}) async {
-    if (base == _base) {
+    if (base == _base && _ratesData != null && _inverseRatesData != null) {
+      print('loadRates: cache hit');
       if (inverse) {
         return _inverseRatesData;
       } else {
