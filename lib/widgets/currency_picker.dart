@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../common/convert_pipe.dart';
+import 'currency_button.dart';
 
 class CurrencyPicker extends StatefulWidget {
   const CurrencyPicker({Key? key}) : super(key: key);
@@ -116,49 +117,31 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
             LayoutBuilder(
               builder: (context, size) {
                 final List<Widget> currencies = [];
-
-                final double buttonWidth = size.maxWidth / 5.0;
-                final TextStyle style = TextStyle(fontSize: buttonWidth * 0.5);
-                final TextStyle labelStyle =
-                    TextStyle(fontSize: buttonWidth * 0.15);
+                final double buttonWidth = size.maxWidth / 5;
 
                 for (Currency currency in this.currencies) {
-                  if (currency.flag != null) {
-                    currencies.add(
-                      IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            Future.delayed(const Duration(milliseconds: 250))
-                                .then((value) {
-                              Navigator.pop(context, currency);
-                            });
-                          },
-                          splashRadius: buttonWidth * 0.5,
-                          iconSize: buttonWidth,
-                          icon: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                CurrencyUtils.currencyToEmoji(currency),
-                                style: style,
-                              ),
-                              Text(
-                                currency.code,
-                                style: labelStyle,
-                              )
-                            ],
-                          )),
-                    );
+                  if (currency.flag == null) {
+                    continue;
                   }
+
+                  currencies.add(
+                    CurrencyButton(
+                      currency: currency,
+                      width: buttonWidth,
+                    ),
+                  );
                 }
 
                 return SizedBox(
                   height: MediaQuery.of(context).size.height * 0.5,
                   width: size.maxWidth,
-                  child: SingleChildScrollView(
-                    child: Wrap(
-                      children: currencies,
-                    ),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      Wrap(
+                        children: currencies,
+                      ),
+                    ],
                   ),
                 );
               },
