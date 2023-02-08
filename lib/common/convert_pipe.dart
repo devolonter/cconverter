@@ -27,7 +27,6 @@ class ConvertPipe extends ChangeNotifier {
   double? _rate;
   List<dynamic> _lastExpression = [];
   double? _lastCalc;
-  CalcSymbol? prevSymbol;
 
   final NumberFormat _fiatFormat =
       NumberFormat('#,##0.##', Platform.localeName.split('_')[1]);
@@ -182,6 +181,8 @@ class ConvertPipe extends ChangeNotifier {
       _lastCalc = null;
       return;
     }
+
+    CalcSymbol? prevSymbol;
 
     final Expression calc = Expression(expression.map((e) {
       if (e is String) {
