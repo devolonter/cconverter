@@ -112,15 +112,16 @@ class ConvertPipe extends ChangeNotifier {
     _dirController.add([_from!, _to!]);
   }
 
-  String format(String? value, {bool stripDecimalSeparator = true}) {
+  String format(String? value,
+      {bool stripDecimalSeparator = true, bool highPrecision = false}) {
     value ??= '';
 
     if (value == '00' || value == '000') {
       value = '0.';
     }
 
-    double doubleValue = toDouble(value);
-    NumberFormat format = doubleValue < 1 ? _cryptoFormat : _fiatFormat;
+    double doubleValue = toDouble(value, highPrecision: highPrecision);
+    NumberFormat format = highPrecision ? _cryptoFormat : _fiatFormat;
     String formattedValue = format.format(doubleValue);
 
     if (value.length >= 3 &&
@@ -141,16 +142,19 @@ class ConvertPipe extends ChangeNotifier {
         formattedValue += '0';
       }
 
-      if (format == _cryptoFormat && formattedValue.endsWith('0') && value.contains(dot)) {
-        formattedValue = formattedValue + '0' * (value.length - formattedValue.length);
+      if (format == _cryptoFormat &&
+          formattedValue.endsWith('0') &&
+          value.contains(dot)) {
+        formattedValue =
+            formattedValue + '0' * (value.length - formattedValue.length);
       }
     }
 
     return formattedValue;
   }
 
-  double toDouble(String value) {
-    final int decimalRange = value.startsWith('0') ? 16 : 2;
+  double toDouble(String value, {bool highPrecision = false}) {
+    final int decimalRange = highPrecision ? 16 : 2;
 
     return double.tryParse((double.tryParse(value
                     .replaceAll(_fiatFormat.symbols.GROUP_SEP, '')
@@ -231,8 +235,10 @@ class ConvertPipe extends ChangeNotifier {
       }
     }
 
-    final String date = DateTime.now().toUtc().toIso8601String().substring(0, 10);
-    Directory dir = Directory('${(await getTemporaryDirectory()).path}/rates/${base.code}');
+    final String date =
+        DateTime.now().toUtc().toIso8601String().substring(0, 10);
+    Directory dir =
+        Directory('${(await getTemporaryDirectory()).path}/rates/${base.code}');
 
     File file = File('${dir.path}/$date.json');
     String? result;
@@ -240,8 +246,10 @@ class ConvertPipe extends ChangeNotifier {
     if (await file.exists()) {
       result = await file.readAsString();
     } else {
-      final String symbols =
-          currencies.getAll().map((Currency currency) => currency.code).join(',');
+      final String symbols = currencies
+          .getAll()
+          .map((Currency currency) => currency.code)
+          .join(',');
       final http.Response response = await http.get(Uri.parse(
           'https://api.exchangerate.host/latest?symbols=$symbols&base=${base.code}'));
 
