@@ -159,7 +159,8 @@ class _CalcStackState extends State<CalcStack> {
     }
 
     setState(() {
-      value = ConvertPipe().format(value.substring(0, value.length - 1));
+      value = ConvertPipe().format(value.substring(0, value.length - 1),
+          stripDecimalSeparator: false);
     });
   }
 }
