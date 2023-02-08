@@ -9,6 +9,8 @@ import '../common/calc_symbols.dart';
 import '../common/convert_pipe.dart';
 import 'calc_stack.dart';
 import 'currency_picker.dart';
+import 'exchange_rate.dart';
+import 'exchange_result.dart';
 import 'numpad.dart';
 
 class MainPage extends StatefulWidget {
@@ -83,58 +85,11 @@ class _MainPageState extends State<MainPage> {
                             input: ConvertPipe().input,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0)
-                              .subtract(const EdgeInsets.only(bottom: 8)),
-                          child: ChangeNotifierProvider(
-                            create: (_) => ConvertPipe(),
-                            child: Consumer<ConvertPipe>(
-                                builder: (context, pipe, child) {
-                              return Text(
-                                pipe.rate != null
-                                    ? '1 ${pipe.from.code} = ${pipe.rate} ${pipe.to.code}'
-                                    : 'Exchange rates loading...',
-                                style: TextStyle(
-                                    color: const Color(0xFFA5A5A5),
-                                    fontSize: min(size.maxHeight / 18, 16)),
-                              );
-                            }),
-                          ),
+                        ExchangeRate(
+                          constraints: size,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 4.0),
-                              child: CurrencyPickerButton(
-                                size: min(size.maxHeight / 15, 16),
-                                currency: ConvertPipe().to,
-                                prefix: Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: min(size.maxHeight / 20, 12),
-                                ),
-                                onChanged: (currency) =>
-                                    ConvertPipe().to = currency,
-                              ),
-                            ),
-                            StreamBuilder<String>(
-                                stream: ConvertPipe().output,
-                                builder: (context, snapshot) {
-                                  final String value =
-                                      ConvertPipe().format(snapshot.data);
-
-                                  return GestureDetector(
-                                    onTap: () => Clipboard.setData(
-                                        ClipboardData(text: value)),
-                                    child: NumValue(
-                                      value: value,
-                                      fontSize: min(size.maxHeight / 6, 42),
-                                      color: const Color(0xFFF1A43C),
-                                    ),
-                                  );
-                                }),
-                          ],
+                        ExchangeResult(
+                          constraints: size,
                         ),
                       ],
                     );
