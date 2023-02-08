@@ -242,7 +242,7 @@ class _CurrencyPickerButtonState extends State<CurrencyPickerButton> {
                   borderRadius: BorderRadius.circular(widget.size)),
               minimumSize: Size.zero,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-              primary: const Color(0xFFAEAEAE)),
+              foregroundColor: const Color(0xFFAEAEAE)),
           onPressed: () {
             CurrencyPicker.show(context).then((value) {
               if (value == null) {

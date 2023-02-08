@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:cconverter/common/convert_pipe.dart';
 import 'package:currency_picker/currency_picker.dart';
-import 'package:intl/intl.dart';
 
 class CalcSymbol {
   CalcSymbol(this.symbol);
