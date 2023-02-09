@@ -9,7 +9,8 @@ import 'currency_picker_button.dart';
 
 class ExchangeResult extends StatelessWidget {
   const ExchangeResult({
-    Key? key, required this.constraints,
+    Key? key,
+    required this.constraints,
   }) : super(key: key);
 
   final BoxConstraints constraints;
@@ -29,22 +30,64 @@ class ExchangeResult extends StatelessWidget {
               Icons.arrow_forward_ios,
               size: min(constraints.maxHeight / 20, 12),
             ),
-            onChanged: (currency) =>
-            ConvertPipe().to = currency,
+            onChanged: (currency) => ConvertPipe().to = currency,
           ),
         ),
         StreamBuilder<String>(
             stream: ConvertPipe().output,
             builder: (context, snapshot) {
-              final String value =
-              ConvertPipe().format(snapshot.data);
+              final String value = ConvertPipe().format(snapshot.data);
+              String result = value;
+              double fontSize = min(constraints.maxHeight / 6, 42);
+              bool minSizeExceeded = false;
+
+              TextPainter textPainter = TextPainter(
+                  text: TextSpan(
+                      text: result, style: TextStyle(fontSize: fontSize)),
+                  textDirection: TextDirection.ltr,
+                  maxLines: 1)
+                ..layout(minWidth: 0, maxWidth: constraints.maxWidth - 90);
+
+              while (textPainter.didExceedMaxLines) {
+                fontSize -= 1;
+                textPainter.text = TextSpan(
+                    text: result, style: TextStyle(fontSize: fontSize));
+                textPainter.layout(
+                    minWidth: 0, maxWidth: constraints.maxWidth - 90);
+
+                if (fontSize < 34) {
+                  if (result.contains(ConvertPipe().decimalSeparator)) {
+                    result = value.substring(
+                        0, value.indexOf(ConvertPipe().decimalSeparator));
+                  } else {
+                    final String trimmed = value.replaceAll(ConvertPipe().groupSeparator, '');
+
+                    if (trimmed.length >= 10) {
+                      result = trimmed.substring(0, trimmed.length - 9);
+                      result = '${ConvertPipe().format(result)}B';
+                    } else if (trimmed.length >= 7) {
+                      result = trimmed.substring(0, trimmed.length - 6);
+                      result = '${ConvertPipe().format(result)}M';
+                    } else if (trimmed.length >= 4) {
+                      result = trimmed.substring(0, trimmed.length - 3);
+                      result = '${ConvertPipe().format(result)}K';
+                    }
+                  }
+
+                  if (minSizeExceeded) {
+                    break;
+                  }
+
+                  fontSize = min(constraints.maxHeight / 6, 42);
+                  minSizeExceeded = true;
+                }
+              }
 
               return GestureDetector(
-                onTap: () => Clipboard.setData(
-                    ClipboardData(text: value)),
+                onTap: () => Clipboard.setData(ClipboardData(text: value)),
                 child: NumValue(
-                  value: value,
-                  fontSize: min(constraints.maxHeight / 6, 42),
+                  value: result,
+                  fontSize: fontSize,
                   color: const Color(0xFFF1A43C),
                 ),
               );

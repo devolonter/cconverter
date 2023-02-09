@@ -45,6 +45,7 @@ class ConvertPipe extends ChangeNotifier {
   Currency? get userCurrency =>
       _currencyService.findByCode(_fiatFormat.currencySymbol);
   String get decimalSeparator => _fiatFormat.symbols.DECIMAL_SEP;
+  String get groupSeparator => _fiatFormat.symbols.GROUP_SEP;
 
   Currency get from {
     if (_from != null) {
@@ -229,10 +230,12 @@ class ConvertPipe extends ChangeNotifier {
   }
 
   Future<RatesData?> _loadRates(Currency base, {bool inverse = false}) async {
-    if (base == _base && _ratesData != null && _inverseRatesData != null) {
-      if (inverse) {
+    if (base == _base) {
+      if (inverse && _inverseRatesData != null) {
         return _inverseRatesData;
-      } else {
+      }
+
+      if (!inverse && _ratesData != null) {
         return _ratesData;
       }
     }
