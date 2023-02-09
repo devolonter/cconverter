@@ -15,7 +15,7 @@ class CurrencyPicker extends StatefulWidget {
     return showModalBottomSheet<Currency?>(
         context: context,
         isScrollControlled: true,
-        backgroundColor: const Color(0xFF202020),
+        backgroundColor: const Color(0xFF191919),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
         builder: (context) {
