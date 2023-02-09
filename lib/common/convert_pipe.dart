@@ -230,7 +230,6 @@ class ConvertPipe extends ChangeNotifier {
 
   Future<RatesData?> _loadRates(Currency base, {bool inverse = false}) async {
     if (base == _base && _ratesData != null && _inverseRatesData != null) {
-      print('loadRates: cache hit');
       if (inverse) {
         return _inverseRatesData;
       } else {

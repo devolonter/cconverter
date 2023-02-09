@@ -146,7 +146,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                             const Padding(
                               padding: EdgeInsets.only(left: 16),
                               child: Text(
-                                'Recently used',
+                                'Recently Used',
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
@@ -162,7 +162,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                                       ))
                                   .toList(),
                             ),
-                            Divider()
+                            const Divider()
                           ],
                         ),
                       Wrap(

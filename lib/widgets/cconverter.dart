@@ -20,15 +20,67 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  bool _isShiftPressed = false;
+
   bool handleKeyboard(KeyEvent event) {
+    if (event is KeyDownEvent) {
+      if (event.physicalKey == PhysicalKeyboardKey.shiftLeft ||
+          event.physicalKey == PhysicalKeyboardKey.shiftRight) {
+        _isShiftPressed = true;
+      }
+    }
+
     if (event is KeyUpEvent) {
+      if (event.physicalKey == PhysicalKeyboardKey.shiftLeft ||
+          event.physicalKey == PhysicalKeyboardKey.shiftRight) {
+        _isShiftPressed = false;
+      }
+
       if ((event.logicalKey.keyId >= 48 && event.logicalKey.keyId < 57) ||
           event.logicalKey.keyId == 46) {
         ConvertPipe().emit(CalcSymbol(event.logicalKey.keyLabel));
-      } else if (event.physicalKey == PhysicalKeyboardKey.backspace) {
+      }
+
+      if (event.physicalKey == PhysicalKeyboardKey.backspace ||
+          event.physicalKey == PhysicalKeyboardKey.delete ||
+          event.physicalKey == PhysicalKeyboardKey.numpadBackspace) {
         ConvertPipe().emit(CalcSymbolBackspace());
-      } else if (event.physicalKey == PhysicalKeyboardKey.escape) {
+      }
+
+      if (event.physicalKey == PhysicalKeyboardKey.escape) {
         ConvertPipe().emit(CalcSymbolAC());
+      }
+
+      if (event.physicalKey == PhysicalKeyboardKey.arrowUp ||
+          event.physicalKey == PhysicalKeyboardKey.arrowDown) {
+        ConvertPipe().switchConversion();
+      }
+
+      if ((event.physicalKey == PhysicalKeyboardKey.equal && _isShiftPressed) ||
+          event.physicalKey == PhysicalKeyboardKey.numpadAdd) {
+        ConvertPipe().emit(MathSymbolPlus());
+      }
+
+      if (event.physicalKey == PhysicalKeyboardKey.minus ||
+          event.physicalKey == PhysicalKeyboardKey.numpadSubtract) {
+        ConvertPipe().emit(MathSymbolMinus());
+      }
+
+      if ((event.physicalKey == PhysicalKeyboardKey.digit8 &&
+              _isShiftPressed) ||
+          event.physicalKey == PhysicalKeyboardKey.numpadMultiply) {
+        ConvertPipe().emit(MathSymbolMul());
+      }
+
+      if (event.physicalKey == PhysicalKeyboardKey.slash ||
+          event.physicalKey == PhysicalKeyboardKey.numpadDivide) {
+        ConvertPipe().emit(MathSymbolDiv());
+      }
+
+      if (event.physicalKey == PhysicalKeyboardKey.comma ||
+          event.physicalKey == PhysicalKeyboardKey.period ||
+          event.physicalKey == PhysicalKeyboardKey.numpadDecimal) {
+        ConvertPipe().emit(CalcSymbolDot());
       }
     }
 
