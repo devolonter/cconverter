@@ -164,7 +164,7 @@ class _CalcStackState extends State<CalcStack> {
   }
 }
 
-class NumValue extends StatelessWidget {
+class NumValue extends StatefulWidget {
   const NumValue({
     Key? key,
     this.color,
@@ -183,22 +183,71 @@ class NumValue extends StatelessWidget {
   final FontWeight? fontWeight;
 
   @override
+  State<NumValue> createState() => _NumValueState();
+}
+
+class _NumValueState extends State<NumValue> {
+  bool animated = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant NumValue oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.value != widget.value) {
+      animated = false;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          animated = true;
+        });
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final Widget displayNum = Text(
-      value,
-      style: value == '0'
-          ? TextStyle(color: const Color(0xFFAAAAAA), fontSize: fontSize, fontWeight: fontWeight)
-          : TextStyle(color: color, fontSize: fontSize, fontWeight: fontWeight),
+    TextStyle style = widget.value == '0'
+        ? TextStyle(
+            color: const Color(0xFFAAAAAA),
+            fontSize: widget.fontSize,
+            fontWeight: widget.fontWeight)
+        : TextStyle(
+            color: widget.color,
+            fontSize: widget.fontSize,
+            fontWeight: widget.fontWeight);
+
+    final Widget displayNum = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          widget.value.substring(0, widget.value.length - 1),
+          style: style,
+        ),
+        AnimatedScale(
+          scale: animated ? 1 : 1.24,
+          duration: Duration(milliseconds: animated ? 250 : 0),
+          curve: Curves.easeOutCubic,
+          child: Text(
+            widget.value.substring(widget.value.length - 1),
+            style: style,
+          ),
+        ),
+      ],
     );
 
-    if (currency == null) {
+    if (widget.currency == null) {
       return displayNum;
     }
 
-    String symbol = currency!.symbol;
+    String symbol = widget.currency!.symbol;
 
-    if (symbol == '\$' && currency!.code != 'USD') {
-      symbol = currency!.code;
+    if (symbol == '\$' && widget.currency!.code != 'USD') {
+      symbol = widget.currency!.code;
     }
 
     return Wrap(
@@ -208,8 +257,8 @@ class NumValue extends StatelessWidget {
           symbol,
           style: TextStyle(
               color: const Color(0xFFFEA00A),
-              fontSize: currencySize != null
-                  ? (currencySize! * 0.5).clamp(12, 15)
+              fontSize: widget.currencySize != null
+                  ? (widget.currencySize! * 0.5).clamp(12, 15)
                   : null),
         ),
         displayNum
