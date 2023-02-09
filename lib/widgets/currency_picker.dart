@@ -150,7 +150,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
-                                    color: Color(0xFFF7C467)),
+                                    color: Colors.grey),
                               ),
                             ),
                             Wrap(
@@ -174,7 +174,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
-                              color: Color(0xFFF7C467)),
+                              color: Colors.grey),
                         ),
                       ),
                       Wrap(
