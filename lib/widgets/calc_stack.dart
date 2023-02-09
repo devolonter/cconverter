@@ -116,9 +116,8 @@ class _CalcStackState extends State<CalcStack> {
         padding: const EdgeInsets.all(8),
         width: double.infinity,
         decoration: BoxDecoration(
-            color: const Color(0xFF333333),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFF1A43C))),
+            color: const Color(0x15FFFFFF),
+            borderRadius: BorderRadius.circular(16)),
         child: LayoutBuilder(
           builder: (context, size) {
             interactiveValue = NumValue(
@@ -172,6 +171,7 @@ class NumValue extends StatelessWidget {
     this.fontSize,
     this.currency,
     this.currencySize,
+    this.fontWeight,
     required this.value,
   }) : super(key: key);
 
@@ -180,14 +180,15 @@ class NumValue extends StatelessWidget {
   final double? fontSize;
   final double? currencySize;
   final Currency? currency;
+  final FontWeight? fontWeight;
 
   @override
   Widget build(BuildContext context) {
     final Widget displayNum = Text(
       value,
       style: value == '0'
-          ? TextStyle(color: const Color(0xFFAAAAAA), fontSize: fontSize)
-          : TextStyle(color: color, fontSize: fontSize),
+          ? TextStyle(color: const Color(0xFFAAAAAA), fontSize: fontSize, fontWeight: fontWeight)
+          : TextStyle(color: color, fontSize: fontSize, fontWeight: fontWeight),
     );
 
     if (currency == null) {

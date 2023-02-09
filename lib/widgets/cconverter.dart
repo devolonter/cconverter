@@ -96,7 +96,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    const Color bgColor = Color(0xFF2B2B2B);
+    const Color bgColor = Color(0xFF000000);
 
     return Theme(
       data: ThemeData.from(
@@ -152,7 +152,7 @@ class _MainPageState extends State<MainPage> {
                 padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
                 width: double.infinity,
                 decoration: const BoxDecoration(
-                    color: Color(0xFF3A3A3A),
+                    color: Color(0x15FFFFFF),
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(16))),
                 child: const SafeArea(

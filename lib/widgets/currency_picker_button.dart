@@ -74,12 +74,12 @@ class _CurrencyPickerButtonState extends State<CurrencyPickerButton> {
               : 0),
       child: TextButton(
           style: TextButton.styleFrom(
-              backgroundColor: const Color(0x11FFFFFF),
+              backgroundColor: const Color(0x18FFFFFF),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(widget.size)),
               minimumSize: Size.zero,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-              foregroundColor: const Color(0xFFAEAEAE)),
+              foregroundColor: Colors.white),
           onPressed: () {
             CurrencyPicker.show(context).then((value) {
               if (value == null) {

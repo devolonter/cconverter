@@ -15,7 +15,7 @@ class CurrencyPicker extends StatefulWidget {
     return showModalBottomSheet<Currency?>(
         context: context,
         isScrollControlled: true,
-        backgroundColor: const Color(0xFF2B2B2B),
+        backgroundColor: const Color(0xFF202020),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
         builder: (context) {
@@ -70,7 +70,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
-                  color: const Color(0x44444444),
+                  color: const Color(0x09FFFFFF),
                 ),
                 child: Row(
                   children: [
@@ -150,7 +150,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
-                                    color: Colors.grey),
+                                    color: Color(0xFFF7C467)),
                               ),
                             ),
                             Wrap(
@@ -165,6 +165,18 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                             const Divider()
                           ],
                         ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 16,
+                            top: Settings().recentlyUsed.isNotEmpty ? 8 : 0),
+                        child: const Text(
+                          'All Currencies',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFFF7C467)),
+                        ),
+                      ),
                       Wrap(
                         children: currencies,
                       ),

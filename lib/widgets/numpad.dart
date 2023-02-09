@@ -33,11 +33,13 @@ class NumPad extends StatelessWidget {
         fontSize: buttonWidth * 0.5,
       ));
 
+      const Color orange = Color(0xFFEC5F38);
+
       buttons.add(
         NumPadButton(
           width: buttonWidth,
           onPressed: () => ConvertPipe().emit(CalcSymbolAC()),
-          color: const Color(0xFFFEA00A),
+          color: orange,
           child: Text(CalcSymbolAC().toString(), style: textStyle),
         ),
       );
@@ -46,7 +48,7 @@ class NumPad extends StatelessWidget {
         NumPadButton(
           width: buttonWidth,
           onPressed: () => ConvertPipe().emit(CalcSymbolBackspace()),
-          color: const Color(0xFFFEA00A),
+          color: orange,
           child: Icon(
             Icons.arrow_back_ios,
             size: buttonWidth * 0.45,
@@ -61,7 +63,7 @@ class NumPad extends StatelessWidget {
           child: FaIcon(
             FontAwesomeIcons.arrowRightArrowLeft,
             size: buttonWidth * 0.5,
-            color: Colors.white.withOpacity(0.5),
+            color: Colors.white.withOpacity(0.66),
           ),
         ),
       );
@@ -77,9 +79,9 @@ class NumPad extends StatelessWidget {
             }
           },
           child: FaIcon(
-            FontAwesomeIcons.earthAmericas,
+            FontAwesomeIcons.dollarSign,
             size: buttonWidth * 0.5,
-            color: Colors.white.withOpacity(0.5),
+            color: Colors.white.withOpacity(0.66),
           ),
         ),
       );
@@ -103,7 +105,7 @@ class NumPad extends StatelessWidget {
           NumPadButton(
             width: buttonWidth,
             onPressed: () => ConvertPipe().emit(mathSymbols[row]),
-            color: const Color(0xFFFEA00A),
+            color: orange,
             child: Text(mathSymbols[row].toString(), style: textStyle),
           ),
         );
@@ -140,7 +142,7 @@ class NumPad extends StatelessWidget {
         NumPadButton(
           width: buttonWidth,
           onPressed: () => ConvertPipe().emit(mathSymbols.last),
-          color: const Color(0xFFFEA00A),
+          color: orange,
           child: Text(mathSymbols.last.toString(), style: textStyle),
         ),
       );
@@ -164,7 +166,7 @@ class NumPadButton extends StatelessWidget {
     required this.width,
     required this.onPressed,
     required this.child,
-    this.color = const Color(0xFF333333),
+    this.color = const Color(0x15FFFFFF),
   }) : super(key: key);
 
   final double width;
@@ -181,7 +183,7 @@ class NumPadButton extends StatelessWidget {
         height: width,
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         color: color,
-        elevation: 2,
+        elevation: 0,
         highlightElevation: 0,
         onPressed: onPressed,
         child: child,

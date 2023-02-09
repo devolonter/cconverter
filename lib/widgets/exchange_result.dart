@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../common/convert_pipe.dart';
 import 'calc_stack.dart';
@@ -40,27 +41,38 @@ class ExchangeResult extends StatelessWidget {
               String result = value;
               double fontSize = min(constraints.maxHeight / 6, 42);
               bool minSizeExceeded = false;
+              bool stripDecimals = false;
 
               TextPainter textPainter = TextPainter(
                   text: TextSpan(
-                      text: result, style: TextStyle(fontSize: fontSize)),
+                      text: result,
+                      style: TextStyle(
+                          fontSize: fontSize,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: GoogleFonts.poppins().fontFamily)),
                   textDirection: TextDirection.ltr,
                   maxLines: 1)
-                ..layout(minWidth: 0, maxWidth: constraints.maxWidth - 90);
+                ..layout(minWidth: 0, maxWidth: constraints.maxWidth - 100);
 
               while (textPainter.didExceedMaxLines) {
                 fontSize -= 1;
                 textPainter.text = TextSpan(
-                    text: result, style: TextStyle(fontSize: fontSize));
+                    text: result,
+                    style: TextStyle(
+                        fontSize: fontSize,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.poppins().fontFamily));
                 textPainter.layout(
-                    minWidth: 0, maxWidth: constraints.maxWidth - 90);
+                    minWidth: 0, maxWidth: constraints.maxWidth - 100);
 
                 if (fontSize < 34) {
                   if (result.contains(ConvertPipe().decimalSeparator)) {
                     result = value.substring(
                         0, value.indexOf(ConvertPipe().decimalSeparator));
+                    stripDecimals = true;
                   } else {
-                    final String trimmed = value.replaceAll(ConvertPipe().groupSeparator, '');
+                    final String trimmed =
+                        value.replaceAll(ConvertPipe().groupSeparator, '');
 
                     if (trimmed.length >= 10) {
                       result = trimmed.substring(0, trimmed.length - 9);
@@ -79,16 +91,21 @@ class ExchangeResult extends StatelessWidget {
                   }
 
                   fontSize = min(constraints.maxHeight / 6, 42);
-                  minSizeExceeded = true;
+                  minSizeExceeded = !stripDecimals;
                 }
               }
 
               return GestureDetector(
                 onTap: () => Clipboard.setData(ClipboardData(text: value)),
-                child: NumValue(
-                  value: result,
-                  fontSize: fontSize,
-                  color: const Color(0xFFF1A43C),
+                child: SizedBox(
+                  height: 60,
+                  child: NumValue(
+                    value: result,
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFFFFC571),
+
+                  ),
                 ),
               );
             }),
