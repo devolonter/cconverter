@@ -35,7 +35,7 @@ class ConvertPipe extends ChangeNotifier {
   final NumberFormat _cryptoFormat =
       NumberFormat('#,##0.${'#' * 16}', Platform.localeName.split('_')[1]);
   final NumberFormat _rateFormat =
-    NumberFormat('#,##0.${'#' * 6}', Platform.localeName.split('_')[1]);
+      NumberFormat('#,##0.${'#' * 6}', Platform.localeName.split('_')[1]);
   final CurrencyService _currencyService = CurrencyService();
 
   Stream<CalcSymbol> get input => _numPadController.stream;
@@ -240,8 +240,11 @@ class ConvertPipe extends ChangeNotifier {
       }
     }
 
-    final String date =
-        DateTime.now().toUtc().toIso8601String().substring(0, 10);
+    final String date = DateTime.now()
+        .subtract(const Duration(minutes: 10))
+        .toUtc()
+        .toIso8601String()
+        .substring(0, 10);
     Directory dir =
         Directory('${(await getTemporaryDirectory()).path}/rates/${base.code}');
 
