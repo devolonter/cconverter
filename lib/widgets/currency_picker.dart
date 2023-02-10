@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'package:cconverter/common/settings.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../common/settings.dart';
 import '../common/convert_pipe.dart';
+import '../common/info_menu.dart';
 import 'currency_button.dart';
 
 class CurrencyPicker extends StatefulWidget {
@@ -15,7 +16,7 @@ class CurrencyPicker extends StatefulWidget {
     return showModalBottomSheet<Currency?>(
         context: context,
         isScrollControlled: true,
-        backgroundColor: const Color(0xFF191919),
+        backgroundColor: InfoMenu.color,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
         builder: (context) {

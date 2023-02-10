@@ -1,5 +1,6 @@
-import 'package:cconverter/common/convert_pipe.dart';
 import 'package:currency_picker/currency_picker.dart';
+
+import '../common/convert_pipe.dart';
 
 class CalcSymbol {
   CalcSymbol(this.symbol);
@@ -21,8 +22,7 @@ class CalcSymbolCurrency extends CalcSymbol {
 }
 
 class CalcSymbolDot extends CalcSymbol {
-  CalcSymbolDot._init()
-      : super(ConvertPipe().decimalSeparator);
+  CalcSymbolDot._init() : super(ConvertPipe().decimalSeparator);
 
   static final CalcSymbolDot _instance = CalcSymbolDot._init();
 

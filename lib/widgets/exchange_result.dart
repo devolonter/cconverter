@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../common/convert_pipe.dart';
+import '../common/info_menu.dart';
 import 'calc_stack.dart';
 import 'currency_picker_button.dart';
 
@@ -97,55 +98,39 @@ class ExchangeResult extends StatelessWidget {
 
               return GestureDetector(
                 onTap: () {
-                  showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: const Color(0xFF191919),
-                      shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(16))),
-                      builder: (context) {
-                        bool symbolOnLeft = ConvertPipe().to.symbolOnLeft;
+                  bool symbolOnLeft = ConvertPipe().to.symbolOnLeft;
 
-                        return SafeArea(
-                          top: false,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 20, bottom: 8, left: 16, right: 16),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                    '${(symbolOnLeft ? ConvertPipe().to.symbol : '')}$value${(symbolOnLeft ? '' : ConvertPipe().to.symbol)}',
-                                    style: const TextStyle(
-                                        color: Color(0xFFFFC571),
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.w600)),
-                                const SizedBox(height: 20),
-                                TextButton(
-                                  onPressed: () {
-                                    Clipboard.setData(
-                                        ClipboardData(text: value));
-                                    Navigator.pop(context);
-                                  },
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Colors.black.withOpacity(0.33),
-                                      foregroundColor: Colors.white.withOpacity(0.9),
-                                      minimumSize:
-                                          const Size(double.infinity, 48),
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(64)))),
-                                  child: const Text('Copy',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600)),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      });
+                  InfoMenu.show(context, Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                          '${(symbolOnLeft ? ConvertPipe().to.symbol : '')}$value${(symbolOnLeft ? '' : ConvertPipe().to.symbol)}',
+                          style: const TextStyle(
+                              color: Color(0xFFFFC571),
+                              fontSize: 28,
+                              fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 20),
+                      TextButton(
+                        onPressed: () {
+                          Clipboard.setData(
+                              ClipboardData(text: value));
+                          Navigator.pop(context);
+                        },
+                        style: TextButton.styleFrom(
+                            backgroundColor: Colors.black.withOpacity(0.33),
+                            foregroundColor: Colors.white.withOpacity(0.9),
+                            minimumSize:
+                            const Size(double.infinity, 48),
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(64)))),
+                        child: const Text('Copy',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600)),
+                      )
+                    ],
+                  ));
                 },
                 child: SizedBox(
                   height: 60,

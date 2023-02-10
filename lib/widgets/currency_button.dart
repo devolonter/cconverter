@@ -1,6 +1,7 @@
-import 'package:cconverter/common/settings.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
+
+import '../common/settings.dart';
 
 class CurrencyButton extends StatelessWidget {
   const CurrencyButton({
