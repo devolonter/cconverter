@@ -107,7 +107,7 @@ class ExchangeResult extends StatelessWidget {
                           '${(symbolOnLeft ? ConvertPipe().to.symbol : '')}$value${(symbolOnLeft ? '' : ConvertPipe().to.symbol)}',
                           style: const TextStyle(
                               color: Color(0xFFFFC571),
-                              fontSize: 28,
+                              fontSize: 26,
                               fontWeight: FontWeight.w600)),
                       const SizedBox(height: 20),
                       TextButton(

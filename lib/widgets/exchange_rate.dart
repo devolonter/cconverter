@@ -31,13 +31,14 @@ class ExchangeRate extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                     color: Color(0xFFFFC571),
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               ConstrainedBox(
                 constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.5,),
+                  maxHeight: MediaQuery.of(context).size.height * 0.5,
+                ),
                 child: Material(
                   color: Colors.transparent,
                   child: ListView.separated(
@@ -45,18 +46,18 @@ class ExchangeRate extends StatelessWidget {
                     itemBuilder: (context, i) {
                       final CurrencyRate rate = rates[i];
                       return ListTile(
-                          title: Text(rate.value.toStringAsFixed(6),
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold
-                              )),
-                          subtitle: Text(
-                              '${rate.currency.name} (${rate.currency.code})'),
-                          leading: Text(
-                            CurrencyUtils.currencyToEmoji(rate.currency),
-                            style: const TextStyle(fontSize: 32),
-                          ),
-                        tileColor: i % 2 == 0 ? Colors.white.withOpacity(0.025) : Colors.white.withOpacity(0.033),
+                        title: Text(ConvertPipe().rateFormat.format(rate.value),
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
+                        subtitle: Text(
+                            '${rate.currency.name} (${rate.currency.code})'),
+                        leading: Text(
+                          CurrencyUtils.currencyToEmoji(rate.currency),
+                          style: const TextStyle(fontSize: 32),
+                        ),
+                        tileColor: i % 2 == 0
+                            ? Colors.white.withOpacity(0.025)
+                            : Colors.white.withOpacity(0.033),
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                         ),

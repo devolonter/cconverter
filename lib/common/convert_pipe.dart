@@ -52,6 +52,9 @@ class ConvertPipe extends ChangeNotifier {
       _currencyService.findByCode(_fiatFormat.currencySymbol);
   String get decimalSeparator => _fiatFormat.symbols.DECIMAL_SEP;
   String get groupSeparator => _fiatFormat.symbols.GROUP_SEP;
+  NumberFormat get fiatFormat => _fiatFormat;
+  NumberFormat get cryptoFormat => _cryptoFormat;
+  NumberFormat get rateFormat => _rateFormat;
 
   Currency get from {
     if (_from != null) {
