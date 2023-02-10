@@ -1,7 +1,8 @@
 # CConverter
 CConverter is a modern and simple currency conversion app that supports expressions. With its advanced expression support, you can easily convert multiple currencies in a single expression. The app features daily updated exchange rates, ensuring you have the most accurate information at your fingertips.
 
-<img src="https://user-images.githubusercontent.com/225176/173121191-9ef39b13-53db-43c6-9bdb-26b979bff450.png" width=128> <img src="https://user-images.githubusercontent.com/225176/173121188-30053b24-b7dd-4f38-a3a0-0d168d1156c6.png" width=128> <img src="https://user-images.githubusercontent.com/225176/173121184-a938b540-75b3-4ca1-910e-82e53310d55e.png" width=128>
+
+![cc-preview](https://user-images.githubusercontent.com/225176/218103734-efed62a0-4594-426e-a7cf-9833a25d87ac.png)
 
 
 ## Features
