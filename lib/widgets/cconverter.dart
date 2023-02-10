@@ -149,7 +149,8 @@ class _MainPageState extends State<MainPage> {
               ),
             )),
             Container(
-                padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                padding: const EdgeInsets.only(
+                    top: 16, left: 16, right: 16, bottom: 8),
                 width: double.infinity,
                 decoration: const BoxDecoration(
                     color: Color(0x15FFFFFF),
