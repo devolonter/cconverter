@@ -25,7 +25,6 @@ class ConvertPipe extends ChangeNotifier {
   Currency? _to;
   RatesData? _ratesData;
   RatesData? _inverseRatesData;
-  Currency? _base;
   double? _rate;
   List<dynamic> _lastExpression = [];
   double? _lastCalc;
@@ -230,16 +229,6 @@ class ConvertPipe extends ChangeNotifier {
   }
 
   Future<RatesData?> _loadRates(Currency base, {bool inverse = false}) async {
-    if (base == _base) {
-      if (inverse && _inverseRatesData != null) {
-        return _inverseRatesData;
-      }
-
-      if (!inverse && _ratesData != null) {
-        return _ratesData;
-      }
-    }
-
     final String date = DateTime.now()
         .subtract(const Duration(minutes: 10))
         .toUtc()
@@ -279,7 +268,6 @@ class ConvertPipe extends ChangeNotifier {
     }
 
     if (result != null) {
-      _base = base;
       return RatesData.fromJson(result, inverse: inverse);
     }
 
