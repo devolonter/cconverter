@@ -11,6 +11,13 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'calc_symbols.dart';
 
+class CurrencyRate {
+  CurrencyRate(this.currency, this.value);
+
+  final Currency currency;
+  final double value;
+}
+
 class ConvertPipe extends ChangeNotifier {
   ConvertPipe._init();
   static final ConvertPipe _instance = ConvertPipe._init();
@@ -210,6 +217,33 @@ class ConvertPipe extends ChangeNotifier {
 
     _lastCalc = calc.eval()?.toDouble();
     _evalController.add(((_lastCalc ?? 0)).toString());
+  }
+
+  List<CurrencyRate> getRates() {
+    final List<CurrencyRate> rates = [];
+    final Map<String, bool> added = {};
+
+    if (_ratesData == null) {
+      return rates;
+    }
+
+    if (_lastExpression.isNotEmpty) {
+      for (var e in _lastExpression) {
+        if (e is List<dynamic>) {
+          final Currency currency = _currencyService.findByCode(e[1])!;
+          if (!added.containsKey(currency.code)) {
+            rates.add(CurrencyRate(currency, _ratesData!.rates[currency.code]!));
+            added[currency.code] = true;
+          }
+        }
+      }
+    }
+
+    if (!added.containsKey(_to!.code)) {
+      rates.add(CurrencyRate(to, _ratesData!.rates[to.code]!));
+    }
+
+    return rates;
   }
 
   Future<void> loadRates() async {
