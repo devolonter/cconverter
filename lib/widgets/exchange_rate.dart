@@ -21,54 +21,98 @@ class ExchangeRate extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (ConvertPipe().rate == null) return;
-        final List<CurrencyRate> rates = ConvertPipe().getRates();
+        final List<CurrencyRate> rates = ConvertPipe().getExpressionRates();
 
+        final toCurrency = ConvertPipe().to;
+        final TextSpan toSymbol = TextSpan(
+          text: toCurrency.symbol,
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w300,
+            color: Colors.white.withOpacity(0.75),
+          ),
+        );
+
+        // todo remove to currency in the title, all currencies are to currency
         InfoMenu.show(
             context,
-            Column(mainAxisSize: MainAxisSize.min, children: [
-              Text(
-                '1 ${ConvertPipe().from.code}',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    color: Color(0xFFFFC571),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.5,
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    itemBuilder: (context, i) {
-                      final CurrencyRate rate = rates[i];
-                      return ListTile(
-                        title: Text(ConvertPipe().rateFormat.format(rate.value),
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
-                        subtitle: Text(
-                            '${rate.currency.name} (${rate.currency.code})'),
-                        leading: Text(
-                          CurrencyUtils.currencyToEmoji(rate.currency),
-                          style: const TextStyle(fontSize: 32),
-                        ),
-                        tileColor: i % 2 == 0
-                            ? Colors.white.withOpacity(0.025)
-                            : Colors.white.withOpacity(0.033),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, i) => const SizedBox(height: 4),
-                    itemCount: rates.length,
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '${toCurrency.name} Exchange Rates',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    color: Colors.white.withOpacity(0.75)
                   ),
                 ),
-              )
-            ]));
+                const SizedBox(height: 16),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.75,
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemBuilder: (context, i) {
+                        final CurrencyRate rate = rates[i];
+                        final String value =
+                            ConvertPipe().rateFormat.format(rate.value);
+                        final int separator = min(
+                            value.indexOf(ConvertPipe().decimalSeparator),
+                            value.length - 3);
+
+                        return ListTile(
+                          title: RichText(
+                            text: TextSpan(
+                              text: '',
+                              children: [
+                                if (toCurrency.symbolOnLeft) toSymbol,
+                                TextSpan(
+                                    text: value.substring(0, separator + 3),
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w600,
+                                        color: const Color(0xFFFFC571),
+                                        fontSize: 18)),
+                                TextSpan(
+                                  text: value.substring(separator + 3),
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.white.withOpacity(0.33),
+                                      fontSize: 14),
+                                ),
+                                if (!toCurrency.symbolOnLeft) toSymbol,
+                              ],
+                            ),
+                          ),
+                          subtitle: Text(
+                            '${rate.currency.name} (${rate.currency.code})',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          leading: Text(
+                            CurrencyUtils.currencyToEmoji(rate.currency),
+                            style: const TextStyle(fontSize: 32),
+                          ),
+                          tileColor: i % 2 == 0
+                              ? Colors.white.withOpacity(0.025)
+                              : Colors.white.withOpacity(0.033),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, i) =>
+                          const SizedBox(height: 4),
+                      itemCount: rates.length,
+                    ),
+                  ),
+                ),
+              ],
+            ));
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0)

@@ -108,7 +108,7 @@ class ExchangeResult extends StatelessWidget {
                           style: const TextStyle(
                               color: Color(0xFFFFC571),
                               fontSize: 26,
-                              fontWeight: FontWeight.w600)),
+                              fontWeight: FontWeight.bold)),
                       const SizedBox(height: 20),
                       TextButton(
                         onPressed: () {
@@ -124,10 +124,10 @@ class ExchangeResult extends StatelessWidget {
                             shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
                                     Radius.circular(64)))),
-                        child: const Text('Copy',
-                            style: TextStyle(
+                        child: Text('Copy',
+                            style: GoogleFonts.poppins(
                                 fontSize: 20,
-                                fontWeight: FontWeight.w600)),
+                                fontWeight: FontWeight.w500)),
                       )
                     ],
                   ));

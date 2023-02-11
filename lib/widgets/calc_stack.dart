@@ -256,7 +256,7 @@ class _NumValueState extends State<NumValue> {
         Text(
           symbol,
           style: TextStyle(
-              color: const Color(0xFFFEA00A),
+              color: const Color(0xFFFFC571),
               fontSize: widget.currencySize != null
                   ? (widget.currencySize! * 0.5).clamp(12, 15)
                   : null),

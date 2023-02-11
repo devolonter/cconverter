@@ -222,11 +222,11 @@ class ConvertPipe extends ChangeNotifier {
     _evalController.add(((_lastCalc ?? 0)).toString());
   }
 
-  List<CurrencyRate> getRates() {
+  List<CurrencyRate> getExpressionRates() {
     final List<CurrencyRate> rates = [];
     final Map<String, bool> added = {};
 
-    if (_ratesData == null) {
+    if (_inverseRatesData == null) {
       return rates;
     }
 
@@ -235,15 +235,15 @@ class ConvertPipe extends ChangeNotifier {
         if (e is List<dynamic>) {
           final Currency currency = _currencyService.findByCode(e[1])!;
           if (!added.containsKey(currency.code)) {
-            rates.add(CurrencyRate(currency, _ratesData!.rates[currency.code]!));
+            rates.add(CurrencyRate(currency, _inverseRatesData!.rates[currency.code]!));
             added[currency.code] = true;
           }
         }
       }
     }
 
-    if (!added.containsKey(_to!.code)) {
-      rates.add(CurrencyRate(to, _ratesData!.rates[to.code]!));
+    if (!added.containsKey(from.code)) {
+      rates.add(CurrencyRate(from, _inverseRatesData!.rates[from.code]!));
     }
 
     return rates;
