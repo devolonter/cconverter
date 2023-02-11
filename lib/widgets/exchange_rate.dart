@@ -31,7 +31,7 @@ class ExchangeRate extends StatelessWidget {
             color: Colors.white.withOpacity(0.75),
           ),
         );
-        
+
         InfoMenu.show(
             context,
             Column(
