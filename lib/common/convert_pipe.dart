@@ -234,7 +234,7 @@ class ConvertPipe extends ChangeNotifier {
       for (var e in _lastExpression) {
         if (e is List<dynamic>) {
           final Currency currency = _currencyService.findByCode(e[1])!;
-          if (!added.containsKey(currency.code)) {
+          if (!added.containsKey(currency.code) && currency != to) {
             rates.add(CurrencyRate(currency, _inverseRatesData!.rates[currency.code]!));
             added[currency.code] = true;
           }
