@@ -31,15 +31,14 @@ class ExchangeRate extends StatelessWidget {
             color: Colors.white.withOpacity(0.75),
           ),
         );
-
-        // todo remove to currency in the title, all currencies are to currency
+        
         InfoMenu.show(
             context,
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  '${toCurrency.name} Exchange Rates',
+                  'Exchange Rates of ${toCurrency.name}',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w600,
