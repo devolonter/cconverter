@@ -37,11 +37,11 @@ class ConvertPipe extends ChangeNotifier {
   double? _lastCalc;
 
   final NumberFormat _fiatFormat =
-      NumberFormat('#,##0.##', Platform.localeName.split('_')[1]);
+      NumberFormat('#,##0.##', Platform.localeName);
   final NumberFormat _cryptoFormat =
-      NumberFormat('#,##0.${'#' * 16}', Platform.localeName.split('_')[1]);
+      NumberFormat('#,##0.${'#' * 16}', Platform.localeName);
   final NumberFormat _rateFormat =
-      NumberFormat('#,##0.${'#' * 6}', Platform.localeName.split('_')[1]);
+      NumberFormat('#,##0.${'#' * 6}', Platform.localeName);
   final CurrencyService _currencyService = CurrencyService();
 
   Stream<CalcSymbol> get input => _numPadController.stream;
