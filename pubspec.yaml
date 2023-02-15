@@ -110,6 +110,7 @@ icons_launcher:
       enable: true
       adaptive_background_image: "assets/launcher/bg.png"
       adaptive_foreground_image: "assets/launcher/fg.png"
+      adaptive_monochrome_image: "assets/launcher/mono.png"
     ios:
       enable: true
     macos:
